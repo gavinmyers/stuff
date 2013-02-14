@@ -34,8 +34,7 @@
   (def timer (Timer. 500 panel))
   (def spriteMap (ImageIO/read (File. "1bitcharanim.png")))
   (def hero (JLabel. (ImageIcon. (.getSubimage spriteMap 8 8 8 8))))
-  (def frame (JFrame. "Clojure Testing"))
-  (doto frame
+  (doto (JFrame. "Clojure Testing") 
     (.addKeyListener (proxy [java.awt.event.KeyListener] []
       (actionPerformed [e] (println e ) (.repaint this))
       (keyPressed [e] (println (.getKeyChar e) " key pressed") (System/exit 0))
