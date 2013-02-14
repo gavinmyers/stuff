@@ -34,7 +34,7 @@
   (def timer (Timer. 5000 panel))
   (def spriteMap (ImageIO/read (File. "1bitcharanim.png")))
   (def hero (JLabel. (ImageIcon. (.getSubimage spriteMap 8 8 8 8))))
-  (def frame (JFrame. "Goop"))
+  (def frame (JFrame. "Clojure Testing"))
   (doto frame
     (. add panel)
     (. add hero)
