@@ -18,24 +18,29 @@
 (def canvas (BufferedImage. width height BufferedImage/TYPE_INT_RGB))
 
 (defn cyan-panel []
+  (println "panel loaded")
   (proxy [JPanel ActionListener KeyListener] []
     (paintComponent [g] 
       (proxy-super paintComponent g)
       (. g drawImage canvas nil nil))
     (actionPerformed [e]
+      (println e)
       (.repaint this))
-    (keyReleased [e])
-    (keyTyped [e])
     (getPreferredSize [] (Dimension. width height))))
 
  
 (defn main []
   (def panel (cyan-panel))
-  (def timer (Timer. 5000 panel))
+  (def timer (Timer. 500 panel))
   (def spriteMap (ImageIO/read (File. "1bitcharanim.png")))
   (def hero (JLabel. (ImageIcon. (.getSubimage spriteMap 8 8 8 8))))
   (def frame (JFrame. "Clojure Testing"))
   (doto frame
+    (.addKeyListener (proxy [java.awt.event.KeyListener] []
+      (actionPerformed [e] (println e ) (.repaint this))
+      (keyPressed [e] (println (.getKeyChar e) " key pressed") (System/exit 0))
+      (keyReleased [e] (println (.getKeyChar e) " key released"))
+      (keyTyped [e] (println (.getKeyChar e) " key typed"))))
     (. add panel)
     (. add hero)
     (. pack)
