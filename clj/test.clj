@@ -16,6 +16,8 @@
 (def width 1024)
 (def height 768)
 (def canvas (BufferedImage. width height BufferedImage/TYPE_INT_RGB))
+(def sprite-map (ImageIO/read (File. "1bitcharanim.png")))
+(def hero (JLabel. (ImageIcon. (.getSubimage sprite-map 8 8 8 8))))
 
 (defn cyan-panel []
   (println "panel loaded")
@@ -32,8 +34,6 @@
 (defn main []
   (def panel (cyan-panel))
   (def timer (Timer. 500 panel))
-  (def spriteMap (ImageIO/read (File. "1bitcharanim.png")))
-  (def hero (JLabel. (ImageIcon. (.getSubimage spriteMap 8 8 8 8))))
   (doto (JFrame. "Clojure Testing") 
     (.addKeyListener (proxy [java.awt.event.KeyListener] []
       (actionPerformed [e] (println e ) (.repaint this))
