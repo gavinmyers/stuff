@@ -12,22 +12,13 @@
 (def canvas (BufferedImage. width height BufferedImage/TYPE_INT_RGB))
 (def frame (JFrame. "Goop"))
 
-(defn rand-color [] 
-  (int (. (new Color (rand-int 255) (rand-int 255) (rand-int 255)) (getRGB))))
-
-(defn mutate-color [old_color] 
-  (int (rand-int old_color))) 
-
-(defn image-randomize []
-  (int-array (repeatedly (* width height) #(rand-color))))
-
-(defn image-mutate [old]
-  (int-array (for [n (range 0 (* width height))] (mutate-color n)) ))
+(defn image-mutate []
+  (int-array (for [n (range 0 (* width height))] (int (rand-int n)))))
 
 (defn randomize [^BufferedImage image]
   (let [w (.getWidth image)
         h (.getHeight image)
-        out (image-mutate (image-randomize))]
+        out (image-mutate)]
     (. image setRGB 0 0 w h out 0 w)))
 
 (defn goop-panel []
