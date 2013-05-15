@@ -7,36 +7,40 @@
 (import java.awt.event.ActionListener)
 (import java.awt.event.KeyListener)
 (import java.awt.image.BufferedImage)
+
 (def width 1024)
 (def height 768)
+(def size (* width height))
 (def canvas (BufferedImage. width height BufferedImage/TYPE_INT_RGB))
 (def frame (JFrame. "Goop"))
 
 (def image-start 
-  (atom (int-array (repeatedly (* width height) #(rand-int 1000000)))))
+  (int-array (repeatedly (* width height) #(rand-int 1000000))))
 
-(defn img-avg [i]
-  (/ (+ 1
-        (aget ^ints @image-start (- i 2))
-        (aget ^ints @image-start (- i 1))
-        (aget ^ints @image-start (- i 0))
-        (aget ^ints @image-start (+ i 1)) 
-        (aget ^ints @image-start (+ i 2))) 
-   3))
+(defn img-avg [^long i]
+  (aset-int image-start i (/ (+ 1
+    (if (= true (< (+ i width) size)) 
+      (aget ^ints image-start (+ i ^long width))
+      (aget ^ints image-start (+ i 0)))
+    (aget ^ints image-start (- i 2))
+    (aget ^ints image-start (- i 1))
+    (aget ^ints image-start (- i 0))
+    (aget ^ints image-start (+ i 1)) 
+    (aget ^ints image-start (+ i 2))) 6)) )
 
 
-(defn image-mutate []
-  (swap! image-start 
-    (fn [img] 
-      (int-array (for [n (range 0 (* width height) )] 
-                         (if (= true (< n (- (* width height) 5)) (> n 5))
-                             (img-avg n) 0) )))))
+(defn image-mutate [img]
+  (dotimes 
+    [n size] 
+    (if (= true (< n (- size 5)) (> n 5))
+        (img-avg n) 
+        0) ))
 
 (defn randomize [^BufferedImage image]
   (let [w (.getWidth image)
         h (.getHeight image)
-        out (image-mutate)]
-  (. image setRGB 0 0 w h @image-start 0 w)))
+        out (image-mutate image)]
+  (. image setRGB 0 0 w h image-start 0 w)))
 
 (defn goop-panel []
   (proxy [JPanel ActionListener KeyListener] []
