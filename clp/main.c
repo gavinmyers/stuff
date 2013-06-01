@@ -66,36 +66,27 @@ draw_pixel(int x, int y, GLubyte r, GLubyte g, GLubyte b)
   buffer[base + 3] = 255;
 }
 
-static void
-display()
-{
-  int x, y, xi, yi;
-  int sq = 10;
-  int ri = 255;
-
-  glClear(GL_COLOR_BUFFER_BIT);
-
+draw_symbol(int x, int y) {
   GLubyte r =  255;
   GLubyte g =  255;
   GLubyte b =  255;
-  
-  for (y = 0; y < height; y = y + sq) {
-    for (x = 0; x < width; x = x + sq) {
-      r = rand() % 255;
-      g = rand() % 10; 
-      b = ri;
-      for(yi = 0; yi < sq; yi++) {
-        for(xi = 0; xi < sq; xi++) {
-          draw_pixel(x + xi, y + yi, r, g, b);
-        }
-      }
-      if(ri == 255) {
-        ri = 0;
-      } else {
-        ri = 255;
-      }
-    }
-  }
+  draw_pixel(x + 0, y + 0, r,g,b);
+  draw_pixel(x + 1, y + 0, r,g,b);
+  draw_pixel(x + 2, y + 0, r,g,b);
+  draw_pixel(x + 3, y + 0, r,g,b);
+  draw_pixel(x + 4, y + 0, r,g,b);
+  draw_pixel(x + 0, y + 1, r,g,b);
+  draw_pixel(x + 0, y + 2, r,g,b);
+  draw_pixel(x + 0, y + 3, r,g,b);
+  draw_pixel(x + 0, y + 4, r,g,b);
+}
+static void
+display()
+{
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  draw_symbol(100,100);
+  draw_symbol(150,150);
 
   glWindowPos2i(0, 0);
   glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
@@ -106,7 +97,7 @@ int
 main(int argc, char** argv)
 {
   srand(0);
-
+  reshape(DEF_SCREEN_WIDTH, DEF_SCREEN_HEIGHT);
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
   glutInitWindowSize(DEF_SCREEN_WIDTH, DEF_SCREEN_HEIGHT);
