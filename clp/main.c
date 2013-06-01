@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <GLUT/glut.h> 
+//#include <GLUT/glut.h> 
+#include <GL/glut.h>//Drawing funciton
 
 #define KEY_ESC 27
 #define WINDOW_POS_X 100
