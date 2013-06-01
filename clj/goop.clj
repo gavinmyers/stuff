@@ -7,6 +7,7 @@
 (import java.awt.event.ActionListener)
 (import java.awt.event.KeyListener)
 (import java.awt.image.BufferedImage)
+(set! *warn-on-reflection* true)
 
 (def width 1024)
 (def height 768)
