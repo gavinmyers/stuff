@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <GLUT/glut.h> 
-#include <GL/glut.h>//Drawing funciton
+#include <GLUT/glut.h> 
+//#include <GL/glut.h>//Drawing funciton
 
 #define KEY_ESC 27
 #define WINDOW_POS_X 100
@@ -66,27 +66,74 @@ draw_pixel(int x, int y, GLubyte r, GLubyte g, GLubyte b)
   buffer[base + 3] = 255;
 }
 
-draw_symbol(int x, int y) {
-  GLubyte r =  255;
-  GLubyte g =  255;
-  GLubyte b =  255;
-  draw_pixel(x + 0, y + 0, r,g,b);
-  draw_pixel(x + 1, y + 0, r,g,b);
-  draw_pixel(x + 2, y + 0, r,g,b);
-  draw_pixel(x + 3, y + 0, r,g,b);
-  draw_pixel(x + 4, y + 0, r,g,b);
-  draw_pixel(x + 0, y + 1, r,g,b);
-  draw_pixel(x + 0, y + 2, r,g,b);
-  draw_pixel(x + 0, y + 3, r,g,b);
-  draw_pixel(x + 0, y + 4, r,g,b);
+static int block_size = 289;
+static int symbol_hero[289] = 
+                              {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,0,1,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,1,0,1,0,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,-1, 
+                               0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1}; 
+
+static int symbol_skeleton[289] = 
+                              {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,1,1,1,0,1,1,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,1,0,1,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1, 
+                               0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1}; 
+
+draw_symbol(int x, int y, int symbol[]) {
+  GLubyte r,g,b;
+  r = 255;
+  int i,ri,ci,ti; 
+  ci = 0;
+  ri = 0;
+  ti = block_size; 
+  for(i = 0; i < ti; i++) {
+    if(symbol[i] == -1) {
+      ri++;
+      ci = 0;
+      continue;
+    } else if(symbol[i] == 1) {
+      draw_pixel(x + ci, y + ri, r,g,b);
+      ci++;
+    } else {
+      ci++;
+    }
+  } 
 }
+
 static void
 display()
 {
   glClear(GL_COLOR_BUFFER_BIT);
 
-  draw_symbol(100,100);
-  draw_symbol(150,150);
+  draw_symbol(100,100, symbol_hero);
+  draw_symbol(150,150, symbol_skeleton);
+  draw_symbol(120,120, symbol_skeleton);
 
   glWindowPos2i(0, 0);
   glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
