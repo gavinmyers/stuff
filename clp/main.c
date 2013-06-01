@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <GLUT/glut.h> 
-//#include <GL/glut.h>//Drawing funciton
+//#include <GLUT/glut.h> 
+#include <GL/glut.h>//Drawing funciton
 
 #define KEY_ESC 27
 #define WINDOW_POS_X 100
@@ -211,14 +211,15 @@ static void
 display()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-
-  draw_symbol(10,10, symbol_blank);
-  draw_symbol(100,100, symbol_hero);
-  draw_symbol(150,150, symbol_skeleton);
-  draw_symbol(120,120, symbol_skeleton);
-  draw_symbol(130,100, symbol_bat);
-  draw_symbol(200,200, symbol_colortest);
-
+  int i = 0;
+  for(i = 0; i < 500; i=i+16) {
+    draw_symbol(i+10,10, symbol_blank);
+    draw_symbol(i+100,rand() % 100, symbol_hero);
+    draw_symbol(i+150,rand() % 600, symbol_skeleton);
+    draw_symbol(i+120,rand() % 600, symbol_skeleton);
+    draw_symbol(i+130,100, symbol_bat);
+    draw_symbol(i+200,rand() % 600, symbol_colortest);
+  }
   glWindowPos2i(0, 0);
   glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
   glutSwapBuffers();
