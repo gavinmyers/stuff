@@ -13,6 +13,7 @@ static int width = 0;
 static int height = 0;
 static int herox = 100;
 static int heroy = 100;
+static float hero_speed = 0.0f;
 
 static GLubyte *buffer = NULL;
 static int fullscreen = 0;
@@ -20,12 +21,17 @@ static int fullscreen = 0;
 static void
 keyboard(unsigned char c, int x, int y)
 {
+  if(c == 'h' || c == 'l') {
+    if(hero_speed < 8) {
+      hero_speed += 0.3;
+    }
+  }
   switch (c) {
   case 'h':
-    herox = herox - 4;
+    herox = herox - 4 - hero_speed;
     break;
   case 'l':
-    herox = herox + 4;
+    herox = herox + 4 + hero_speed;
     break;
   case KEY_ESC:
     exit(0);
@@ -218,6 +224,9 @@ draw_symbol(int x, int y, int symbol[]) {
 static void
 display()
 {
+  if(hero_speed > 0) {
+    hero_speed -= 0.07;
+  }
   int x,y;
   for(x = 0; x < DEF_SCREEN_WIDTH; x++) {
     for(y = 0; y < DEF_SCREEN_HEIGHT; y++) {
