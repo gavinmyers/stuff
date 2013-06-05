@@ -26,17 +26,22 @@ keyboard(unsigned char c, int x, int y)
       hero_speed += 0.3;
     }
   }
-  switch (c) {
-  case 'h':
+  if(c == 'k') {
+    heroy = heroy - 4 - hero_speed;
+  }
+  if(c == 'j') {
+    heroy = heroy + 4 + hero_speed;
+  }
+  if(c == 'h') {
     herox = herox - 4 - hero_speed;
-    break;
-  case 'l':
+  }
+  if(c == 'l') {
     herox = herox + 4 + hero_speed;
-    break;
-  case KEY_ESC:
+  }
+  if(c == KEY_ESC) {
     exit(0);
-    break;
-  case 'f':
+  }
+  if(c == 'f') {
     if (fullscreen) {
       glutReshapeWindow(DEF_SCREEN_WIDTH, DEF_SCREEN_HEIGHT);
       glutPositionWindow(WINDOW_POS_X, WINDOW_POS_Y);
@@ -45,7 +50,6 @@ keyboard(unsigned char c, int x, int y)
       glutFullScreen();
       fullscreen = 1;
     }
-    break;
   }
 }
 
@@ -99,10 +103,17 @@ static void
 draw_pixel(int x, int y, int color) 
 {
   int base = 4 * ((height - 1 - y) * width + x);
-  buffer[base + 0] = ega[color][0];
-  buffer[base + 1] = ega[color][1];
-  buffer[base + 2] = ega[color][2];
-  buffer[base + 3] = 255;
+  if(base < 0 || base > 4 * height * width) {
+    return;
+  }
+  int div = 1;
+  if(rand() % 100 < 10) {
+    div = 2;
+  }
+  buffer[base + 0] = ega[color][0] / div;
+  buffer[base + 1] = ega[color][1] / div;
+  buffer[base + 2] = ega[color][2] / div;
+  buffer[base + 3] = 0;
 }
 
 static int block_size = 289;
@@ -231,6 +242,9 @@ display()
   for(x = 0; x < DEF_SCREEN_WIDTH; x++) {
     for(y = 0; y < DEF_SCREEN_HEIGHT; y++) {
       if(rand() % 100 < 40) {
+        if(x < 100 && y < 100) {
+          draw_symbol(x,y, symbol_hero);
+        }
         draw_pixel(x, y, 0);
       }
     }
