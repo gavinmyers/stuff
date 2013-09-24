@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <GLUT/glut.h> 
-#include <GL/glut.h>//Drawing funciton
+#include <GLUT/glut.h> 
+//#include <GL/glut.h>//Drawing funciton
 
 #define KEY_ESC 27
 #define WINDOW_POS_X 100
@@ -254,7 +254,7 @@ display()
   glWindowPos2i(0, 0);
   glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
   glutSwapBuffers();
-  //glFlush();
+  glFlush();
 }
 
 int
