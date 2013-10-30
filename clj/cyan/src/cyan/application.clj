@@ -1,4 +1,6 @@
-(ns cyan.application) 
+(ns cyan.application 
+  (:use [clojure.tools.logging :only (info error)])
+  (:use [seesaw.core :as s :only (listen)]))
 
 (import javax.swing.JFrame)
 (import javax.swing.JPanel)
@@ -31,7 +33,13 @@
         sw 8 
         sh 8 
         ]
-  (. g drawImage (img-sprite) px py (+ px sw) (+ py sh) (* i sw) (* j sh) (* (+ i 1) sw) (* (+ j 1) sh) nil ))) 
+  (. g drawImage 
+      (img-sprite) 
+      px py 
+      (+ px sw) (+ py sh) 
+      (* i sw) (* j sh) 
+      (* (+ i 1) sw) (* (+ j 1) sh) nil ))) 
+
 
 (defn goop-panel []
   (proxy [JPanel ActionListener KeyListener] []
@@ -40,11 +48,11 @@
       (beat g))
     (actionPerformed [e]
       (.repaint this))
-    (keyReleased [e])
-    (keyTyped [e])
     (getPreferredSize [] (Dimension. width height))))
 
 (def panel (goop-panel))
+
+(defn key-press [e] (info e))
 
 (defn main []
   (doto frame
@@ -56,4 +64,5 @@
     (. setDefaultCloseOperation (JFrame/EXIT_ON_CLOSE)))
   (.start (Timer. 0 panel)))
 
+  (listen frame :key-pressed key-press)
 (main)
