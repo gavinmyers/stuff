@@ -61,9 +61,13 @@
    :75 #(swap! agent-y (fn [n] (- n 5)))
    :74 #(swap! agent-y (fn [n] (+ n 5)))
     })
+
 (defn key-press [e] 
-  (let [inf (info (.getKeyCode e))]
-    (((keyword (str (.getKeyCode e))) key-actions))))
+  (let [keyvar (keyword (str (.getKeyCode e)))
+        keyfunc (keyvar key-actions)]
+    (if (nil? keyfunc) 
+      (info (.getKeyCode e))
+      (keyfunc) )))
 
 (defn main []
   (doto frame
