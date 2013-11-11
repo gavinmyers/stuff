@@ -26,7 +26,28 @@
 (def sprite 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/hero.png"))))
 
+(def tree 
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree.png"))))
+
+(defn img-tree [] @tree) 
+
 (defn img-sprite [] @sprite) 
+
+(defn render [g]
+  (let [px 100 
+        py 100 
+        i  0 
+        j  0 
+        sw 8 
+        sh 8 
+        ]
+  (. g drawImage 
+      (img-tree) 
+      px py 
+      (+ px sw) (+ py sh) 
+      (* i sw) (* j sh) 
+      (* (+ i 1) sw) (* (+ j 1) sh) nil ))) 
+
 
 (defn beat [g]
   (let [px @agent-x 
@@ -48,6 +69,7 @@
   (proxy [JPanel ActionListener KeyListener] []
     (paintComponent [g] 
       (proxy-super paintComponent g)
+      (render g)
       (beat g))
     (actionPerformed [e]
       (.repaint this))
@@ -64,8 +86,7 @@
    :16 #(info "SHIFT")
    :18 #(info "OPTION")
    :17 #(info "CONTROL")
-   :157 #(info "COMMAND")
-    })
+   :157 #(info "COMMAND")})
 
 (defn key-press [e] 
   (let [keyvar (keyword (str (.getKeyCode e)))
