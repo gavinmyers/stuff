@@ -19,6 +19,9 @@
 (def size (* width height))
 (def canvas (BufferedImage. width height BufferedImage/TYPE_INT_RGB))
 (def frame (JFrame. "Another work in progress"))
+(def agent-x (atom 150)) 
+(def agent-y (atom 150)) 
+
 
 (def sprite 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/hero.png"))))
@@ -26,8 +29,8 @@
 (defn img-sprite [] @sprite) 
 
 (defn beat [g]
-  (let [px 150 
-        py 200 
+  (let [px @agent-x 
+        py @agent-y 
         i  0 
         j  0 
         sw 8 
@@ -52,7 +55,15 @@
 
 (def panel (goop-panel))
 
-(defn key-press [e] (info e))
+(def key-actions 
+  {:76 #(swap! agent-x (fn [n] (+ n 5)))
+   :72 #(swap! agent-x (fn [n] (- n 5)))
+   :75 #(swap! agent-y (fn [n] (- n 5)))
+   :74 #(swap! agent-y (fn [n] (+ n 5)))
+    })
+(defn key-press [e] 
+  (let [inf (info (.getKeyCode e))]
+    (((keyword (str (.getKeyCode e))) key-actions))))
 
 (defn main []
   (doto frame
