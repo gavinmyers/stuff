@@ -60,6 +60,11 @@
    :72 #(swap! agent-x (fn [n] (- n 5)))
    :75 #(swap! agent-y (fn [n] (- n 5)))
    :74 #(swap! agent-y (fn [n] (+ n 5)))
+   :32 #(info "SPACE")
+   :16 #(info "SHIFT")
+   :18 #(info "OPTION")
+   :17 #(info "CONTROL")
+   :157 #(info "COMMAND")
     })
 
 (defn key-press [e] 
