@@ -33,44 +33,29 @@
 
 (defn img-sprite [] @sprite) 
 
-(defn render [g]
-  (let [px 100 
-        py 100 
-        i  0 
+(defn draw [px, py, spt, g]
+  (let [i  0 
         j  0 
         sw 8 
         sh 8 
         ]
   (. g drawImage 
-      (img-tree) 
+      (spt) 
       px py 
       (+ px sw) (+ py sh) 
       (* i sw) (* j sh) 
       (* (+ i 1) sw) (* (+ j 1) sh) nil ))) 
-
-
-(defn beat [g]
-  (let [px @agent-x 
-        py @agent-y 
-        i  0 
-        j  0 
-        sw 8 
-        sh 8 
-        ]
-  (. g drawImage 
-      (img-sprite) 
-      px py 
-      (+ px sw) (+ py sh) 
-      (* i sw) (* j sh) 
-      (* (+ i 1) sw) (* (+ j 1) sh) nil ))) 
-
 
 (defn goop-panel []
   (proxy [JPanel ActionListener KeyListener] []
     (paintComponent [g] 
       (proxy-super paintComponent g)
-      (render g)
-      (beat g))
+      (draw 100 100 img-tree g)
+      (draw 110 100 img-tree g)
+      (draw 120 100 img-tree g)
+      (draw 140 100 img-tree g)
+      (draw 180 100 img-tree g)
+      (draw @agent-x @agent-y img-sprite g))
     (actionPerformed [e]
       (.repaint this))
     (getPreferredSize [] (Dimension. width height))))
