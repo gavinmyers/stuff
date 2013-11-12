@@ -23,33 +23,29 @@
 (def agent-y (atom 150)) 
 
 
-(def sprite 
+(def r-sprite 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/hero.png"))))
-(def tree 
+(def r-tree 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree.png"))))
-(def rock 
+(def r-rock 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/rock.png"))))
 
-(def grass001 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-001.png"))))
-(def grass002
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-002.png"))))
-(def grass003 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-003.png"))))
-(def grass004 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-004.png"))))
-(def grass005 
+(def r-grass000 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-005.png"))))
+(def r-grass001 
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-001.png"))))
+(def r-grass002
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-002.png"))))
+(def r-grass003 
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-003.png"))))
+(def r-grass004 
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-004.png"))))
 
-(defn img-rock [] @rock) 
-(defn img-tree [] @tree) 
-(defn img-sprite [] @sprite) 
+(defn img-rock [] [@r-rock]) 
+(defn img-tree [] [@r-tree]) 
+(defn img-grass [] [@r-grass000 @r-grass001 @r-grass002 @r-grass003 @r-grass004]) 
 
-(defn img-grass-001 [] @grass001) 
-(defn img-grass-002 [] @grass002) 
-(defn img-grass-003 [] @grass003) 
-(defn img-grass-004 [] @grass004) 
-(defn img-grass-005 [] @grass005) 
+(defn img-sprite [] [@r-sprite]) 
 
 (defn draw [px, py, spt, g]
   (let [i  0 
@@ -58,33 +54,55 @@
         sh 16 
         ]
   (. g drawImage 
-      (spt) 
+      spt 
       px py 
       (+ px sw) (+ py sh) 
       (* i sw) (* j sh) 
       (* (+ i 1) sw) (* (+ j 1) sh) nil ))) 
 
-(defn -scene []
-  (repeatedly 100 (fn [] {:x (rand-int 800) :y (rand-int 800)}) ))
+(defn draw-sprite [spt g] 
+  (draw (:x spt) (:y spt) (:sprite spt) g))
 
-(def scene (-scene)) 
+(defn player []
+  (rand-nth (img-sprite))) 
 
-(defn goop-panel []
+(defn grass [] 
+  (rand-nth (img-grass))) 
+
+(defn rock [] 
+  (rand-nth (img-rock))) 
+
+(defn tree [] 
+  (rand-nth (img-tree))) 
+
+(defn grassland [] 
+  (map #(%) (for [x (range 0 800 16) y (range 0 800 16)]
+             (fn [] {:x x :y y :sprite (grass)}) )))
+
+(defn rocks [] 
+  (repeatedly 10 (fn [] {:x (rand-int 800) :y (rand-int 800) :sprite (rock)}) ))
+
+(defn trees [] 
+  (repeatedly 100 (fn [] {:x (rand-int 800) :y (rand-int 800) :sprite (tree)}) ))
+
+(defn creatures [] )
+
+(defn -world [] 
+  (apply concat (grassland) (rocks) (trees) (creatures))) 
+
+(def world (memoize -world))
+
+(defn game-panel []
   (proxy [JPanel ActionListener KeyListener] []
     (paintComponent [g] 
       (proxy-super paintComponent g)
-      (dorun (for [x (range 0 800 16) y (range 0 800 16)]
-           (draw x y img-grass-002 g)))
-      (dorun (map #(draw (:x %) (:y %) img-tree g) scene))
-      (draw 50 50 img-grass-004 g)
-      (draw 100 100 img-rock g)
-      (draw 150 100 img-rock g)
-      (draw @agent-x @agent-y img-sprite g))
+    (dorun (map #(draw-sprite % g) (world))) 
+    (draw @agent-x @agent-y (player) g))
     (actionPerformed [e]
       (.repaint this))
     (getPreferredSize [] (Dimension. width height))))
 
-(def panel (goop-panel))
+(def panel (game-panel))
 
 (def key-actions 
   {:76 #(swap! agent-x (fn [n] (+ n 5)))
