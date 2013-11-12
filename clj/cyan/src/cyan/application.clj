@@ -37,8 +37,8 @@
 (defn draw [px, py, spt, g]
   (let [i  0 
         j  0 
-        sw 8 
-        sh 8 
+        sw 16 
+        sh 16 
         ]
   (. g drawImage 
       (spt) 
