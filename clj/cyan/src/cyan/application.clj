@@ -29,8 +29,11 @@
 (def tree 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree.png"))))
 
-(defn img-tree [] @tree) 
+(def rock 
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/rock.png"))))
 
+(defn img-rock [] @rock) 
+(defn img-tree [] @tree) 
 (defn img-sprite [] @sprite) 
 
 
@@ -57,6 +60,8 @@
     (paintComponent [g] 
       (proxy-super paintComponent g)
       (dorun (map #(draw (:x %) (:y %) img-tree g) scene))
+      (draw 100 100 img-rock g)
+      (draw 150 100 img-rock g)
       (draw @agent-x @agent-y img-sprite g))
     (actionPerformed [e]
       (.repaint this))
