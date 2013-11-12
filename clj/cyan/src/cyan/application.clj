@@ -25,17 +25,31 @@
 
 (def sprite 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/hero.png"))))
-
 (def tree 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree.png"))))
-
 (def rock 
   (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/rock.png"))))
+
+(def grass001 
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-001.png"))))
+(def grass002
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-002.png"))))
+(def grass003 
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-003.png"))))
+(def grass004 
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-004.png"))))
+(def grass005 
+  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-005.png"))))
 
 (defn img-rock [] @rock) 
 (defn img-tree [] @tree) 
 (defn img-sprite [] @sprite) 
 
+(defn img-grass-001 [] @grass001) 
+(defn img-grass-002 [] @grass002) 
+(defn img-grass-003 [] @grass003) 
+(defn img-grass-004 [] @grass004) 
+(defn img-grass-005 [] @grass005) 
 
 (defn draw [px, py, spt, g]
   (let [i  0 
@@ -59,7 +73,10 @@
   (proxy [JPanel ActionListener KeyListener] []
     (paintComponent [g] 
       (proxy-super paintComponent g)
+      (dorun (for [x (range 0 800 16) y (range 0 800 16)]
+           (draw x y img-grass-002 g)))
       (dorun (map #(draw (:x %) (:y %) img-tree g) scene))
+      (draw 50 50 img-grass-004 g)
       (draw 100 100 img-rock g)
       (draw 150 100 img-rock g)
       (draw @agent-x @agent-y img-sprite g))
