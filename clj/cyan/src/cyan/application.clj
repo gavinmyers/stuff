@@ -33,6 +33,7 @@
 
 (defn img-sprite [] @sprite) 
 
+
 (defn draw [px, py, spt, g]
   (let [i  0 
         j  0 
@@ -46,15 +47,16 @@
       (* i sw) (* j sh) 
       (* (+ i 1) sw) (* (+ j 1) sh) nil ))) 
 
+(defn -scene []
+  (repeatedly 100 (fn [] {:x (rand-int 800) :y (rand-int 800)}) ))
+
+(def scene (-scene)) 
+
 (defn goop-panel []
   (proxy [JPanel ActionListener KeyListener] []
     (paintComponent [g] 
       (proxy-super paintComponent g)
-      (draw 100 100 img-tree g)
-      (draw 110 100 img-tree g)
-      (draw 120 100 img-tree g)
-      (draw 140 100 img-tree g)
-      (draw 180 100 img-tree g)
+      (dorun (map #(draw (:x %) (:y %) img-tree g) scene))
       (draw @agent-x @agent-y img-sprite g))
     (actionPerformed [e]
       (.repaint this))
