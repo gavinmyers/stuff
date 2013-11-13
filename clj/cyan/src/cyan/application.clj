@@ -23,39 +23,23 @@
 (def agent-y (atom 150)) 
 
 (defn img-rock [] 
-  [@(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/rock.png")))]) 
+  [@(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/rock.png")))]) 
 
 (defn img-tree [] 
-  [@(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree-000.png")))
-   @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree-001.png")))
-   @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree-002.png")))])
+  [@(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree-000.png")))
+   @(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree-001.png")))
+   @(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree-002.png")))])
 
 (defn img-grass [] 
-  [@(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-000.png")))
-    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-001.png")))
-    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-002.png")))
-    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-003.png")))
-    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-004.png")))
-    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-005.png")))])
+  [@(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-000.png")))
+    @(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-001.png")))
+    @(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-002.png")))
+    @(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-003.png")))
+    @(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-004.png")))
+    @(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-005.png")))])
 
 (defn img-sprite []
-  [@(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/hero.png")))])
-
-(defn draw [px, py, spt, g]
-  (let [i  0 
-        j  0 
-        sw 16 
-        sh 16 
-        ]
-  (. g drawImage 
-      spt 
-      px py 
-      (+ px sw) (+ py sh) 
-      (* i sw) (* j sh) 
-      (* (+ i 1) sw) (* (+ j 1) sh) nil ))) 
-
-(defn draw-sprite [spt g] 
-  (draw (:x spt) (:y spt) (:sprite spt) g))
+  [@(atom (-> (Toolkit/getDefaultToolkit) (.getImage "img/hero.png")))])
 
 (defn player []
   (rand-nth (img-sprite))) 
@@ -86,12 +70,32 @@
 
 (def world (memoize -world))
 
+(defn draw [px, py, spt, g]
+  (let [i  0 
+        j  0 
+        sw 16 
+        sh 16 
+        ]
+  (. g drawImage 
+      spt 
+      px py 
+      (+ px sw) (+ py sh) 
+      (* i sw) (* j sh) 
+      (* (+ i 1) sw) (* (+ j 1) sh) nil ))) 
+
+(defn draw-sprite [spt g] 
+  (draw (:x spt) (:y spt) (:sprite spt) g))
+
+
+(defn beat [g] 
+  (dorun (map #(draw-sprite % g) (world))) 
+  (draw @agent-x @agent-y (player) g))
+
 (defn game-panel []
   (proxy [JPanel ActionListener KeyListener] []
     (paintComponent [g] 
       (proxy-super paintComponent g)
-    (dorun (map #(draw-sprite % g) (world))) 
-    (draw @agent-x @agent-y (player) g))
+      (beat g))
     (actionPerformed [e]
       (.repaint this))
     (getPreferredSize [] (Dimension. width height))))
