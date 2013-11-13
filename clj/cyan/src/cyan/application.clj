@@ -22,30 +22,24 @@
 (def agent-x (atom 150)) 
 (def agent-y (atom 150)) 
 
+(defn img-rock [] 
+  [@(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/rock.png")))]) 
 
-(def r-sprite 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/hero.png"))))
-(def r-tree 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree.png"))))
-(def r-rock 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/rock.png"))))
+(defn img-tree [] 
+  [@(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree-000.png")))
+   @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree-001.png")))
+   @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/tree-002.png")))])
 
-(def r-grass000 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-005.png"))))
-(def r-grass001 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-001.png"))))
-(def r-grass002
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-002.png"))))
-(def r-grass003 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-003.png"))))
-(def r-grass004 
-  (ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-004.png"))))
+(defn img-grass [] 
+  [@(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-000.png")))
+    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-001.png")))
+    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-002.png")))
+    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-003.png")))
+    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-004.png")))
+    @(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/grass-005.png")))])
 
-(defn img-rock [] [@r-rock]) 
-(defn img-tree [] [@r-tree]) 
-(defn img-grass [] [@r-grass000 @r-grass001 @r-grass002 @r-grass003 @r-grass004]) 
-
-(defn img-sprite [] [@r-sprite]) 
+(defn img-sprite []
+  [@(ref (-> (Toolkit/getDefaultToolkit) (.getImage "img/hero.png")))])
 
 (defn draw [px, py, spt, g]
   (let [i  0 
