@@ -19,8 +19,8 @@
 (def size (* width height))
 (def canvas (BufferedImage. width height BufferedImage/TYPE_INT_RGB))
 (def frame (JFrame. "Another work in progress"))
-(def agent-x (atom 150)) 
-(def agent-y (atom 150)) 
+(def player-x (atom 150)) 
+(def player-y (atom 150)) 
 
 (def img-rock (fn [] 
   [(-> (Toolkit/getDefaultToolkit) (.getImage "img/rock.png"))])) 
@@ -53,22 +53,26 @@
 (defn tree [] 
   (rand-nth (img-tree))) 
 
-(defn grassland [] 
+(defn -grassland [] 
   (map #(%) (for [x (range 0 800 16) y (range 0 800 16)]
              (fn [] {:x x :y y :sprite (grass)}) )))
 
-(defn rocks [] 
+(def grassland (memoize -grassland))
+
+(defn -rocks [] 
   (repeatedly 10 (fn [] {:x (rand-int 800) :y (rand-int 800) :sprite (rock)}) ))
 
-(defn trees [] 
-  (repeatedly 100 (fn [] {:x (rand-int 800) :y (rand-int 800) :sprite (tree)}) ))
+(def rocks (memoize -rocks))
 
-(defn creatures [] )
+(defn -trees [] 
+  (repeatedly 500 (fn [] {:x (rand-int 800) :y (rand-int 800) :sprite (tree)}) ))
+(def trees (memoize -trees))
 
-(defn -world [] 
-  (apply concat (grassland) (rocks) (trees) (creatures))) 
+(defn creatures [] 
+  (repeatedly 1 (fn [] {:x @player-x :y @player-y :sprite (player)}) ))
 
-(def world (memoize -world))
+(defn world [] 
+  (sort-by :y (apply concat (rocks) (trees) (creatures) ())))
 
 (defn draw [px, py, spt, g]
   (let [i  0 
@@ -88,8 +92,8 @@
 
 
 (defn beat [g] 
-  (dorun (map #(draw-sprite % g) (world))) 
-  (draw @agent-x @agent-y (player) g))
+  (dorun (map #(draw-sprite % g) (grassland))) 
+  (dorun (map #(draw-sprite % g) (world)))) 
 
 (defn game-panel []
   (proxy [JPanel ActionListener KeyListener] []
@@ -103,10 +107,10 @@
 (def panel (game-panel))
 
 (def key-actions 
-  {:76 #(swap! agent-x (fn [n] (+ n 5)))
-   :72 #(swap! agent-x (fn [n] (- n 5)))
-   :75 #(swap! agent-y (fn [n] (- n 5)))
-   :74 #(swap! agent-y (fn [n] (+ n 5)))
+  {:76 #(swap! player-x (fn [n] (+ n 5)))
+   :72 #(swap! player-x (fn [n] (- n 5)))
+   :75 #(swap! player-y (fn [n] (- n 5)))
+   :74 #(swap! player-y (fn [n] (+ n 5)))
    :32 #(info "SPACE")
    :16 #(info "SHIFT")
    :18 #(info "OPTION")
