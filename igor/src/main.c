@@ -6,8 +6,8 @@
 static int WIN_H = 0;
 static int WIN_W = 0;
 
-char * drawline( int n, const char * s );
-char * drawline( int n, const char * s ) {
+char * drawh( int n, const char * s );
+char * drawh( int n, const char * s ) {
   size_t slen = strlen(s);
   char * dest = malloc(n*slen+1);
  
@@ -48,7 +48,7 @@ int main() {
   init_pair(3, COLOR_RED, COLOR_WHITE);
 
   attron(COLOR_PAIR(1));
-  char * background = drawline(WIN_W, " ");
+  char * background = drawh(WIN_W, " ");
   for(i=0;i<WIN_H;++i) {
     move(i,0);
     printw(background);
@@ -57,7 +57,7 @@ int main() {
   attroff(COLOR_PAIR(1));
 
   //display header & footer
-  char * header = drawline(WIN_W, ".");
+  char * header = drawh(WIN_W, ".");
   attron(COLOR_PAIR(1));
   move(0,0);
   printw(header);
@@ -81,6 +81,8 @@ int main() {
 
   free(header);
 
+  move((WIN_H/2)-1,0);
+  printw("Press any key to begin");
   //user input
   int ch = getch();
   if(ch == KEY_F(1)) {
