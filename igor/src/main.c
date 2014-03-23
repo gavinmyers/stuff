@@ -42,16 +42,34 @@ int main() {
     exit(1);
   }
 
+  init_pair(1, COLOR_BLACK, COLOR_WHITE);
+  init_pair(2, COLOR_BLUE, COLOR_WHITE);
+  init_pair(3, COLOR_RED, COLOR_WHITE);
+
   //display header & footer
+  char * header = drawline(WIN_W, ".");
   attron(COLOR_PAIR(1));
-  char * header = drawline(WIN_W, "#");
   move(0,0);
-  init_pair(1, COLOR_RED, COLOR_BLACK);
   printw(header);
   move(WIN_H-1,0);
   printw(header);
-  free(header);
   attroff(COLOR_PAIR(1));
+
+  attron(COLOR_PAIR(2));
+  move(1,0);
+  printw(header);
+  move(WIN_H-2,0);
+  printw(header);
+  attroff(COLOR_PAIR(2));
+
+  attron(COLOR_PAIR(3));
+  move(2,0);
+  printw(header);
+  move(WIN_H-3,0);
+  printw(header);
+  attroff(COLOR_PAIR(3));
+
+  free(header);
 
   //user input
   int ch = getch();
@@ -67,7 +85,7 @@ int main() {
 
   refresh();
   move(WIN_H-2,0);
-  printw("** press any key to exit**");
+  printw("** press any key to exit **");
   getch();
   endwin();
   return 0;
