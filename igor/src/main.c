@@ -20,13 +20,10 @@ char * drawline( int n, const char * s ) {
 }
 
 int main() { 
-  int ch;
+  //ncurses startup
   initscr();
-  if(has_colors() == FALSE)
-  { endwin();
-    printf("Your terminal does not support color\n");
-    exit(1);
-  }
+
+  //ncurses defaults
   start_color();
   curs_set(0);
   getmaxyx(stdscr,WIN_H,WIN_W);
@@ -34,6 +31,18 @@ int main() {
   keypad(stdscr, TRUE);
   noecho();
 
+  //errors
+  if(has_colors() == FALSE) { endwin();
+    printf("Your terminal does not support color\n");
+    exit(1);
+  }
+
+  if(WIN_H < 10 || WIN_W < 10) {
+    printf("Your terminal is WAY too small\n"); 
+    exit(1);
+  }
+
+  //display header & footer
   attron(COLOR_PAIR(1));
   char * header = drawline(WIN_W, "#");
   move(0,0);
@@ -44,7 +53,8 @@ int main() {
   free(header);
   attroff(COLOR_PAIR(1));
 
-  ch = getch();
+  //user input
+  int ch = getch();
   if(ch == KEY_F(1)) {
     printw("F1 Key pressed");
   } else {
@@ -54,7 +64,10 @@ int main() {
     printw("%c", ch);
     attroff(A_BOLD);
   }
+
   refresh();
+  move(WIN_H-2,0);
+  printw("** press any key to exit**");
   getch();
   endwin();
   return 0;
