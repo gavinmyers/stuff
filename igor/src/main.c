@@ -22,16 +22,28 @@ char * drawline( int n, const char * s ) {
 int main() { 
   int ch;
   initscr();
+  if(has_colors() == FALSE)
+  { endwin();
+    printf("Your terminal does not support color\n");
+    exit(1);
+  }
+  start_color();
   curs_set(0);
   getmaxyx(stdscr,WIN_H,WIN_W);
   raw();
   keypad(stdscr, TRUE);
   noecho();
-  char * header = drawline(WIN_H, "-");
+
+  attron(COLOR_PAIR(1));
+  char * header = drawline(WIN_W, "#");
   move(0,0);
+  init_pair(1, COLOR_RED, COLOR_BLACK);
   printw(header);
   move(WIN_H-1,0);
   printw(header);
+  free(header);
+  attroff(COLOR_PAIR(1));
+
   ch = getch();
   if(ch == KEY_F(1)) {
     printw("F1 Key pressed");
@@ -45,6 +57,5 @@ int main() {
   refresh();
   getch();
   endwin();
-  free(header);
   return 0;
 }
