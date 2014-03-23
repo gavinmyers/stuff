@@ -37,14 +37,24 @@ int main() {
     exit(1);
   }
 
-  if(WIN_H < 10 || WIN_W < 10) {
+  if(WIN_H < 25 || WIN_W < 50) {
     printf("Your terminal is WAY too small\n"); 
     exit(1);
   }
+  int i;
 
   init_pair(1, COLOR_BLACK, COLOR_WHITE);
   init_pair(2, COLOR_BLUE, COLOR_WHITE);
   init_pair(3, COLOR_RED, COLOR_WHITE);
+
+  attron(COLOR_PAIR(1));
+  char * background = drawline(WIN_W, " ");
+  for(i=0;i<WIN_H;++i) {
+    move(i,0);
+    printw(background);
+  } 
+  free(background);
+  attroff(COLOR_PAIR(1));
 
   //display header & footer
   char * header = drawline(WIN_W, ".");
