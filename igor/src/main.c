@@ -95,10 +95,10 @@ int main() {
     attroff(A_BOLD);
   }
 
-  refresh();
   move(WIN_H-2,0);
   printw("** press any key to exit **");
   getch();
+  //refresh();
   endwin();
   return 0;
 }
