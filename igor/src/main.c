@@ -46,6 +46,7 @@ int main() {
   init_pair(1, COLOR_BLACK, COLOR_WHITE);
   init_pair(2, COLOR_BLUE, COLOR_WHITE);
   init_pair(3, COLOR_RED, COLOR_WHITE);
+  init_pair(99, COLOR_BLUE, COLOR_WHITE);
 
   attron(COLOR_PAIR(1));
   char * background = drawh(WIN_W, " ");
@@ -78,6 +79,12 @@ int main() {
   move(WIN_H-3,0);
   printw(header);
   attroff(COLOR_PAIR(3));
+
+  attron(COLOR_PAIR(99));
+  move(4,4);
+  printw("@");
+  attroff(COLOR_PAIR(99));
+
 
   free(header);
 
