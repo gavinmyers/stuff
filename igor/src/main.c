@@ -5,33 +5,29 @@
 
 static int WIN_H = 0;
 static int WIN_W = 0;
+WINDOW * WIN;
 
 char * drawh( int n, const char * s );
 char * drawh( int n, const char * s ) {
   size_t slen = strlen(s);
   char * dest = malloc(n*slen+1);
- 
-  int i; char * p;
-  for ( i=0, p = dest; i < n; ++i, p += slen ) {
+  char * p = NULL;
+  int i; 
+  for (i=0, p = dest; i < n; ++i, p += slen) {
     memcpy(p, s, slen);
   }
-  *p = '\0';
   return dest;
 }
 
 int main() { 
-  //ncurses startup
-  initscr();
-
-  //ncurses defaults
+  WIN = initscr();
   start_color();
   curs_set(0);
-  getmaxyx(stdscr,WIN_H,WIN_W);
   raw();
-  keypad(stdscr, TRUE);
   noecho();
+  keypad(stdscr, TRUE);
+  getmaxyx(stdscr,WIN_H,WIN_W);
 
-  //errors
   if(has_colors() == FALSE) { endwin();
     printf("Your terminal does not support color\n");
     exit(1);
@@ -57,7 +53,6 @@ int main() {
   free(background);
   attroff(COLOR_PAIR(1));
 
-  //display header & footer
   char * header = drawh(WIN_W, ".");
   attron(COLOR_PAIR(1));
   move(0,0);
@@ -90,7 +85,7 @@ int main() {
 
   move((WIN_H/2)-1,0);
   printw("Press any key to begin");
-  //user input
+
   int ch = getch();
   if(ch == KEY_F(1)) {
     printw("F1 Key pressed");
@@ -105,7 +100,7 @@ int main() {
   move(WIN_H-2,0);
   printw("** press any key to exit **");
   getch();
-  //refresh();
+  refresh();
   endwin();
   return 0;
 }
