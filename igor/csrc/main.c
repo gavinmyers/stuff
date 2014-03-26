@@ -19,6 +19,10 @@ char * drawh( int n, const char * s ) {
   return dest;
 }
 
+void v(int n);
+void v(int n) {
+}
+
 int main() { 
   WIN = initscr();
   start_color();
