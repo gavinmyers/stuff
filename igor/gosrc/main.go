@@ -26,7 +26,13 @@ func main() {
   termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 loop:
   for {
-    printf_tb(3, 19, termbox.ColorWhite, termbox.ColorBlack, "Key: ")
+    printf_tb(2, 20, termbox.ColorCyan, termbox.ColorBlack, "@")
+    printf_tb(4, 20, termbox.ColorCyan, termbox.ColorBlack, "Hello World")
+    termbox.SetCell(0, 0, 0x250C, termbox.ColorWhite, termbox.ColorBlack)
+    termbox.SetCell(1, 1, 0x251C, termbox.ColorWhite, termbox.ColorBlack)
+    termbox.SetCell(2, 2, 0x252C, termbox.ColorWhite, termbox.ColorBlack)
+    termbox.SetCell(2, 3, 0x165C, termbox.ColorWhite, termbox.ColorBlack)
+    termbox.SetCell(4, 5, 0x0298, termbox.ColorWhite, termbox.ColorBlack)
     termbox.Flush()
     ev := termbox.PollEvent()
     if(ev.Key == termbox.KeyCtrlC) {
