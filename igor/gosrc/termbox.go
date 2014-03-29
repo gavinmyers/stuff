@@ -2,7 +2,6 @@ package main
 
 import "github.com/nsf/termbox-go"
 import "math/rand"
-import "time"
 
 func draw() {
   w, h := termbox.Size()
@@ -40,7 +39,6 @@ loop:
       }
     default:
       draw()
-      time.Sleep(10 * time.Millisecond)
     }
   }
 }
