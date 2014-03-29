@@ -42,14 +42,39 @@ loop:
     termbox.SetCell(0, WINDOW_HEIGHT - 1, 0x253C, termbox.ColorWhite, termbox.ColorBlack)
     printf_tb(0, 1, termbox.ColorCyan, termbox.ColorBlack, strconv.Itoa(WINDOW_WIDTH))
     printf_tb(0, 2, termbox.ColorCyan, termbox.ColorBlack, strconv.Itoa(WINDOW_HEIGHT))
-    rwidth := r.Intn(WINDOW_WIDTH)
-    rwidth_c1 := r.Intn(rwidth)
-    rwidth_c2 := r.Intn(WINDOW_WIDTH - rwidth) + rwidth
-    rheight := r.Intn(WINDOW_HEIGHT)
-    rheight_c1 := r.Intn(rheight)
-    rheight_c2 := r.Intn(WINDOW_HEIGHT - rheight) + rheight
+    rwidth := r.Intn(WINDOW_WIDTH / 2) + WINDOW_WIDTH / 4
+    rwidth_c1 := r.Intn(rwidth / 2) + rwidth / 4
+    rwidth_c2 := r.Intn((WINDOW_WIDTH - rwidth) / 2) + rwidth + ((WINDOW_WIDTH - rwidth) / 4)
+    rheight := r.Intn(WINDOW_HEIGHT / 2) + WINDOW_HEIGHT / 4
+    rheight_c1 := r.Intn(rheight / 2) + rheight / 4
+    rheight_c2 := r.Intn((WINDOW_HEIGHT - rheight) / 2) + rheight + ((WINDOW_HEIGHT - rheight) / 4)
     printf_tb(0, 4, termbox.ColorCyan, termbox.ColorBlack, strconv.Itoa(rwidth))
     printf_tb(0, 3, termbox.ColorCyan, termbox.ColorBlack, strconv.Itoa(rheight))
+
+    printf_tb(0,rheight_c1-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth+1,rheight_c1-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth_c1+1,rheight_c1-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth_c2+1,rheight_c1-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(WINDOW_WIDTH-1,rheight_c1-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+
+    printf_tb(0,rheight-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth+1,rheight-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth_c1+1,rheight-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth_c2+1,rheight-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(WINDOW_WIDTH-1,rheight-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+
+    printf_tb(0,rheight_c2-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth+1,rheight_c2-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth_c1+1,rheight_c2-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth_c2+1,rheight_c2-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(WINDOW_WIDTH-1,rheight_c2-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+
+    printf_tb(0,WINDOW_HEIGHT-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth+1,WINDOW_HEIGHT-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth_c1+1,WINDOW_HEIGHT-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(rwidth_c2+1,WINDOW_HEIGHT-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+    printf_tb(WINDOW_WIDTH-1,WINDOW_HEIGHT-1,termbox.ColorWhite, termbox.ColorBlack, ".")
+
     for j := 0; j < WINDOW_WIDTH; j++ {
       printf_tb(j,rheight,termbox.ColorCyan, termbox.ColorBlack, "-")
       printf_tb(j,rheight_c1,termbox.ColorCyan, termbox.ColorBlack, "-")
