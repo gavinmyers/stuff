@@ -1,7 +1,6 @@
 package main
 
-import "github.com/nsf/termbox-go"
-import "math/rand"
+import "github.com/limetext/termbox-go"
 
 func draw() {
   w, h := termbox.Size()
@@ -9,7 +8,7 @@ func draw() {
   for y := 0; y < h; y++ {
     for x := 0; x < w; x++ {
       termbox.SetCell(x, y, ' ', termbox.ColorDefault,
-        termbox.Attribute(rand.Int()%8)+1)
+       termbox.Attribute(244) )
     }
   }
   termbox.Flush()
@@ -17,6 +16,7 @@ func draw() {
 
 func main() {
   err := termbox.Init()
+  termbox.SetColorMode(termbox.ColorMode256)
   if err != nil {
     panic(err)
   }
