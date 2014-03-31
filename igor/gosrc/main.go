@@ -64,11 +64,11 @@ loop:
     printf_tb(rwidth_c2+1,rheight-1,termbox.Attribute(255), termbox.Attribute(0), ".")
     printf_tb(WINDOW_WIDTH-1,rheight-1,termbox.Attribute(255), termbox.Attribute(0), ".")
 
-    printf_tb(0,rheight_c2-1,termbox.ColorMagenta, termbox.Attribute(0), "*")
+    printf_tb(0,rheight_c2-1,termbox.Attribute(rand.Int() * 255), termbox.Attribute(0), "*")
     currentWidth := 0
     currentHeight := rheight
     for i := 0; i < WINDOW_WIDTH; i++ {
-      printf_tb(currentWidth,currentHeight,termbox.ColorMagenta, termbox.Attribute(0), "*")
+      printf_tb(currentWidth,currentHeight,termbox.Attribute(rand.Int() * 255), termbox.Attribute(0), "*")
       if(r.Intn(3) == 1) {
         currentHeight--
       } else if(r.Intn(3) == 1) {
@@ -87,7 +87,7 @@ loop:
     currentWidth = 0
     currentHeight = rheight
     for i := 0; i < WINDOW_WIDTH; i++ {
-      printf_tb(currentWidth,currentHeight,termbox.ColorMagenta, termbox.Attribute(0), "*")
+      printf_tb(currentWidth,currentHeight,termbox.Attribute(rand.Int() * 255), termbox.Attribute(0), "*")
       if(r.Intn(3) == 1) {
         currentHeight--
       } else if(r.Intn(3) == 1) {
