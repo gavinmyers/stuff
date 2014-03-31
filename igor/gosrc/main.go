@@ -4,11 +4,9 @@ import "github.com/limetext/termbox-go"
 import "fmt"
 import "math/rand"
 import "strconv"
-import "time"
 
 var WINDOW_WIDTH = 0
 var WINDOW_HEIGHT = 0
-var r = rand.New(rand.NewSource(time.Now().UnixNano()))
 var COLOR [256]termbox.Attribute
 
 func init() {
@@ -37,16 +35,16 @@ loop:
 		termbox.SetCell(0, WINDOW_HEIGHT-1, 0x253C, COLOR[255], COLOR[0])
 
 
-		rwidth := r.Intn(WINDOW_WIDTH/2) + WINDOW_WIDTH/4
+		rwidth := rand.Intn(WINDOW_WIDTH/2) + WINDOW_WIDTH/4
 
-		rwidth_c1 := r.Intn(rwidth/2) + rwidth/4
-		rwidth_c2 := r.Intn((WINDOW_WIDTH-rwidth)/2) +
+		rwidth_c1 := rand.Intn(rwidth/2) + rwidth/4
+		rwidth_c2 := rand.Intn((WINDOW_WIDTH-rwidth)/2) +
                  rwidth + ((WINDOW_WIDTH - rwidth) / 4)
 
-		rheight := r.Intn(WINDOW_HEIGHT/2) + WINDOW_HEIGHT/4
+		rheight := rand.Intn(WINDOW_HEIGHT/2) + WINDOW_HEIGHT/4
 
-		rheight_c1 := r.Intn(rheight/2) + rheight/4
-		rheight_c2 := r.Intn((WINDOW_HEIGHT-rheight)/2) +
+		rheight_c1 := rand.Intn(rheight/2) + rheight/4
+		rheight_c2 := rand.Intn((WINDOW_HEIGHT-rheight)/2) +
                   rheight + ((WINDOW_HEIGHT - rheight) / 4)
 
 		printf_tb(0, 1, COLOR[32], COLOR[0], strconv.Itoa(WINDOW_WIDTH))
@@ -77,12 +75,12 @@ loop:
                       0x00A4,
                       COLOR[rand.Intn(len(COLOR))],
                       COLOR[rand.Intn(len(COLOR))])
-			if r.Intn(2) == 1 {
+			if rand.Intn(2) == 1 {
 				currentHeight--
 			} else {
 				currentHeight++
 			}
-			if r.Intn(2) == 1 {
+			if rand.Intn(2) == 1 {
 				currentWidth--
 			} else {
 				currentWidth++
@@ -97,17 +95,13 @@ loop:
                       0x00A4,
                       COLOR[rand.Intn(len(COLOR))],
                       COLOR[rand.Intn(len(COLOR))])
-			if r.Intn(3) == 1 {
+			if rand.Intn(3) == 1 {
 				currentHeight--
-			} else if r.Intn(3) == 1 {
-				currentHeight++
 			} else {
 				currentHeight++
 			}
-			if r.Intn(3) == 1 {
-				currentWidth++
-			} else if r.Intn(3) == 1 {
-				currentWidth++
+			if rand.Intn(3) == 1 {
+				currentWidth--
 			} else {
 				currentWidth++
 			}
