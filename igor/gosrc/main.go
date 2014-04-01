@@ -15,9 +15,9 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-  for i := 0; i < 255; i++ {
-    COLOR[i] = termbox.Attribute(i)
-  }
+	for i := 0; i < 255; i++ {
+		COLOR[i] = termbox.Attribute(i)
+	}
 }
 
 func main() {
@@ -34,18 +34,17 @@ loop:
 		termbox.SetCell(WINDOW_WIDTH-1, WINDOW_HEIGHT-1, 0x253C, COLOR[255], COLOR[0])
 		termbox.SetCell(0, WINDOW_HEIGHT-1, 0x253C, COLOR[255], COLOR[0])
 
-
 		rwidth := rand.Intn(WINDOW_WIDTH/2) + WINDOW_WIDTH/4
 
 		rwidth_c1 := rand.Intn(rwidth/2) + rwidth/4
 		rwidth_c2 := rand.Intn((WINDOW_WIDTH-rwidth)/2) +
-                 rwidth + ((WINDOW_WIDTH - rwidth) / 4)
+			rwidth + ((WINDOW_WIDTH - rwidth) / 4)
 
 		rheight := rand.Intn(WINDOW_HEIGHT/2) + WINDOW_HEIGHT/4
 
 		rheight_c1 := rand.Intn(rheight/2) + rheight/4
 		rheight_c2 := rand.Intn((WINDOW_HEIGHT-rheight)/2) +
-                  rheight + ((WINDOW_HEIGHT - rheight) / 4)
+			rheight + ((WINDOW_HEIGHT - rheight) / 4)
 
 		printf_tb(0, 1, COLOR[32], COLOR[0], strconv.Itoa(WINDOW_WIDTH))
 		printf_tb(0, 2, COLOR[32], COLOR[0], strconv.Itoa(WINDOW_HEIGHT))
@@ -56,11 +55,11 @@ loop:
 		currentHeight := rheight
 
 		for i := 0; i < WINDOW_WIDTH; i++ {
-      termbox.SetCell(currentWidth,
-                      currentHeight,
-                      0x00A4,
-                      COLOR[rand.Intn(len(COLOR))],
-                      COLOR[rand.Intn(len(COLOR))])
+			termbox.SetCell(currentWidth,
+				currentHeight,
+				0x00A4,
+				COLOR[rand.Intn(len(COLOR))],
+				COLOR[rand.Intn(len(COLOR))])
 			if rand.Intn(2) == 1 {
 				currentHeight--
 			} else {
@@ -76,11 +75,11 @@ loop:
 		currentWidth = 0
 		currentHeight = rheight
 		for i := 0; i < WINDOW_WIDTH; i++ {
-      termbox.SetCell(currentWidth,
-                      currentHeight,
-                      0x00A4,
-                      COLOR[rand.Intn(len(COLOR))],
-                      COLOR[rand.Intn(len(COLOR))])
+			termbox.SetCell(currentWidth,
+				currentHeight,
+				0x00A4,
+				COLOR[rand.Intn(len(COLOR))],
+				COLOR[rand.Intn(len(COLOR))])
 			if rand.Intn(3) == 1 {
 				currentHeight--
 			} else {
@@ -139,24 +138,23 @@ loop:
 		printf_tb(rwidth-2, rheight+1, COLOR[120], COLOR[0], "SW")
 		printf_tb(rwidth+1, rheight+1, COLOR[120], COLOR[0], "SE")
 
+		rooms := rand.Intn(12) + 4
+		for i := 0; i < rooms; i++ {
+			//      start := rand.Intn(20)
+			//      end := rand.Intn(20)
+		}
+		path := connect(rwidth_c1, WINDOW_HEIGHT, 0, 0)
+		var pathX = 0
+		var pathY = 0
+		for i := 0; i < len(path); i++ {
+			if path[i] == 1 {
+				pathX++
+			} else {
+				pathY++
+			}
 
-    rooms := rand.Intn(12) + 4
-    for i := 0; i < rooms; i++ {
-//      start := rand.Intn(20)
-//      end := rand.Intn(20)
-    }
-    path := connect(rwidth_c1,WINDOW_HEIGHT,0,0 )
-    var pathX = 0
-    var pathY = 0
-    for i := 0; i < len(path); i++ { 
-      if(path[i] == 1) {
-        pathX++
-      } else {
-        pathY++
-      }
-
-      printf_tb(pathX, pathY, COLOR[120], COLOR[0], "*")
-    }
+			printf_tb(pathX, pathY, COLOR[120], COLOR[0], "*")
+		}
 
 		printf_tb((WINDOW_WIDTH/2)-8, 0, COLOR[32], COLOR[0], "--- I.G.O.R. ---")
 		termbox.Flush()
@@ -167,25 +165,25 @@ loop:
 	}
 }
 
-func connect(startX,startY,endX,endY int) ([]int) {
-  lenX := startX - endX
-  if(lenX < 0) {
-    lenX = endX - startX
-  }
-  lenY := startY - endY
-  if(lenY < 0) {
-    lenY = endY - startY
-  }
-  lenT := lenX + lenY
-  path := make([]int,lenT,lenT)
-  for i := 0; i < lenT; i++ {
-    dir := 0
-    if(rand.Intn(2) == 1) {
-      dir = 1
-    }
-    path[i] = dir
-  }
-  return path
+func connect(startX, startY, endX, endY int) []int {
+	lenX := startX - endX
+	if lenX < 0 {
+		lenX = endX - startX
+	}
+	lenY := startY - endY
+	if lenY < 0 {
+		lenY = endY - startY
+	}
+	lenT := lenX + lenY
+	path := make([]int, lenT, lenT)
+	for i := 0; i < lenT; i++ {
+		dir := 0
+		if rand.Intn(2) == 1 {
+			dir = 1
+		}
+		path[i] = dir
+	}
+	return path
 }
 
 func print_tb(x, y int, fg, bg termbox.Attribute, msg string) {
@@ -199,5 +197,3 @@ func printf_tb(x, y int, fg, bg termbox.Attribute, format string, args ...interf
 	s := fmt.Sprintf(format, args...)
 	print_tb(x, y, fg, bg, s)
 }
-
-
