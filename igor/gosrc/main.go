@@ -52,20 +52,6 @@ loop:
 		printf_tb(0, 4, COLOR[32], COLOR[0], strconv.Itoa(rwidth))
 		printf_tb(0, 3, COLOR[32], COLOR[0], strconv.Itoa(rheight))
 
-		printf_tb(0, rheight_c1-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth+1, rheight_c1-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth_c1+1, rheight_c1-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth_c2+1, rheight_c1-1, COLOR[255], COLOR[0], ".")
-		printf_tb(WINDOW_WIDTH-1, rheight_c1-1, COLOR[255], COLOR[0], ".")
-
-		printf_tb(0, rheight-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth+1, rheight-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth_c1+1, rheight-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth_c2+1, rheight-1, COLOR[255], COLOR[0], ".")
-		printf_tb(WINDOW_WIDTH-1, rheight-1, COLOR[255], COLOR[0], ".")
-
-		printf_tb(0, rheight_c2-1, COLOR[rand.Intn(len(COLOR))], COLOR[0], "*")
-
 		currentWidth := 0
 		currentHeight := rheight
 
@@ -107,17 +93,6 @@ loop:
 			}
 		}
 
-		printf_tb(rwidth+1, rheight_c2-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth_c1+1, rheight_c2-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth_c2+1, rheight_c2-1, COLOR[255], COLOR[0], ".")
-		printf_tb(WINDOW_WIDTH-1, rheight_c2-1, COLOR[255], COLOR[0], ".")
-
-		printf_tb(0, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth+1, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth_c1+1, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], ".")
-		printf_tb(rwidth_c2+1, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], ".")
-		printf_tb(WINDOW_WIDTH-1, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], ".")
-
 		for j := 0; j < WINDOW_WIDTH; j++ {
 			printf_tb(j, rheight, COLOR[16], COLOR[0], "-")
 			printf_tb(j, rheight_c1, COLOR[16], COLOR[0], "-")
@@ -130,6 +105,30 @@ loop:
 			printf_tb(rwidth_c2, i, COLOR[16], COLOR[0], "|")
 		}
 
+		printf_tb(0, rheight_c1-1, COLOR[255], COLOR[0], "01")
+		printf_tb(rwidth_c1+1, rheight_c1-1, COLOR[255], COLOR[0], "02")
+		printf_tb(rwidth+1, rheight_c1-1, COLOR[255], COLOR[0], "03")
+		printf_tb(rwidth_c2+1, rheight_c1-1, COLOR[255], COLOR[0], "04")
+		printf_tb(WINDOW_WIDTH-2, rheight_c1-1, COLOR[255], COLOR[0], "05")
+
+		printf_tb(0, rheight-1, COLOR[255], COLOR[0], "06")
+		printf_tb(rwidth_c1+1, rheight-1, COLOR[255], COLOR[0], "07")
+		printf_tb(rwidth+1, rheight-1, COLOR[255], COLOR[0], "08")
+		printf_tb(rwidth_c2+1, rheight-1, COLOR[255], COLOR[0], "09")
+		printf_tb(WINDOW_WIDTH-2, rheight-1, COLOR[255], COLOR[0], "10")
+
+		printf_tb(0, rheight_c2-1, COLOR[255], COLOR[0], "11")
+		printf_tb(rwidth_c1+1, rheight_c2-1, COLOR[255], COLOR[0], "12")
+		printf_tb(rwidth+1, rheight_c2-1, COLOR[255], COLOR[0], "13")
+		printf_tb(rwidth_c2+1, rheight_c2-1, COLOR[255], COLOR[0], "14")
+		printf_tb(WINDOW_WIDTH-2, rheight_c2-1, COLOR[255], COLOR[0], "15")
+
+		printf_tb(0, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], "16")
+		printf_tb(rwidth_c1+1, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], "17")
+		printf_tb(rwidth+1, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], "18")
+		printf_tb(rwidth_c2+1, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], "19")
+		printf_tb(WINDOW_WIDTH-2, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], "20")
+
 		printf_tb(rwidth, rheight, COLOR[120], COLOR[0], "*")
 		printf_tb(rwidth, rheight-2, COLOR[120], COLOR[0], "N")
 		printf_tb(rwidth, rheight+2, COLOR[120], COLOR[0], "S")
@@ -140,6 +139,25 @@ loop:
 		printf_tb(rwidth-2, rheight+1, COLOR[120], COLOR[0], "SW")
 		printf_tb(rwidth+1, rheight+1, COLOR[120], COLOR[0], "SE")
 
+
+    rooms := rand.Intn(12) + 4
+    for i := 0; i < rooms; i++ {
+//      start := rand.Intn(20)
+//      end := rand.Intn(20)
+    }
+    path := connect(rwidth_c1,WINDOW_HEIGHT,0,0 )
+    var pathX = 0
+    var pathY = 0
+    for i := 0; i < len(path); i++ { 
+      if(path[i] == 1) {
+        pathX++
+      } else {
+        pathY++
+      }
+
+      printf_tb(pathX, pathY, COLOR[120], COLOR[0], "*")
+    }
+
 		printf_tb((WINDOW_WIDTH/2)-8, 0, COLOR[32], COLOR[0], "--- I.G.O.R. ---")
 		termbox.Flush()
 		ev := termbox.PollEvent()
@@ -147,6 +165,27 @@ loop:
 			break loop
 		}
 	}
+}
+
+func connect(startX,startY,endX,endY int) ([]int) {
+  lenX := startX - endX
+  if(lenX < 0) {
+    lenX = endX - startX
+  }
+  lenY := startY - endY
+  if(lenY < 0) {
+    lenY = endY - startY
+  }
+  lenT := lenX + lenY
+  path := make([]int,lenT,lenT)
+  for i := 0; i < lenT; i++ {
+    dir := 0
+    if(rand.Intn(2) == 1) {
+      dir = 1
+    }
+    path[i] = dir
+  }
+  return path
 }
 
 func print_tb(x, y int, fg, bg termbox.Attribute, msg string) {
