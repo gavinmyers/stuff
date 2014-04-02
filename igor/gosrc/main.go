@@ -155,9 +155,9 @@ loop:
 			printf_tb(pathX, pathY, COLOR[120], COLOR[0], "*")
 		}
 
-		path = connect(rwidth_c1, WINDOW_HEIGHT, 0, 0)
-		pathX = 0
-		pathY = 0
+		path = connect(rwidth_c2+1, rheight_c2-1, rwidth_c1+1, rheight_c1-1)
+		pathX = rwidth_c1+1
+		pathY = rheight_c1-1
 		for i := 0; i < len(path); i++ {
 			if path[i] == 1 {
 				pathX++
