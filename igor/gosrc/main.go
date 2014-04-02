@@ -144,8 +144,8 @@ loop:
 			//      end := rand.Intn(20)
 		}
 		path := connect(rwidth_c1, WINDOW_HEIGHT, 0, 0)
-		var pathX = 0
-		var pathY = 0
+    pathX := 0
+    pathY := 0
 		for i := 0; i < len(path); i++ {
 			if path[i] == 1 {
 				pathX++
@@ -154,6 +154,19 @@ loop:
 			}
 			printf_tb(pathX, pathY, COLOR[120], COLOR[0], "*")
 		}
+
+		path = connect(rwidth_c1, WINDOW_HEIGHT, 0, 0)
+		pathX = 0
+		pathY = 0
+		for i := 0; i < len(path); i++ {
+			if path[i] == 1 {
+				pathX++
+			} else {
+				pathY++
+			}
+			printf_tb(pathX, pathY, COLOR[120], COLOR[0], "*")
+		}
+
 
 		printf_tb((WINDOW_WIDTH/2)-8, 0, COLOR[32], COLOR[0], "--- I.G.O.R. ---")
 		termbox.Flush()
