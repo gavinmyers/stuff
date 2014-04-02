@@ -152,7 +152,6 @@ loop:
 			} else {
 				pathY++
 			}
-
 			printf_tb(pathX, pathY, COLOR[120], COLOR[0], "*")
 		}
 
@@ -176,14 +175,19 @@ func connect(startX, startY, endX, endY int) []int {
 	}
 	lenT := lenX + lenY
 	path := make([]int, lenT, lenT)
-	for i := 0; i < lenT; i++ {
-		dir := 0
-		if rand.Intn(2) == 1 {
-			dir = 1
-		}
-		path[i] = dir
+
+	for i := 0; i < lenX; i++ {
+		path[i] = 1
 	}
-	return path
+	for i := lenX; i < lenY; i++ {
+		path[i] = 0
+	}
+    dest := make([]int, len(path))
+    perm := rand.Perm(len(path))
+    for i, v := range perm {
+      dest[v] = path[i]
+    }
+	return dest 
 }
 
 func print_tb(x, y int, fg, bg termbox.Attribute, msg string) {
