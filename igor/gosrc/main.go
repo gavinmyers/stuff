@@ -104,11 +104,34 @@ loop:
 			printf_tb(rwidth_c2, i, COLOR[16], COLOR[0], "|")
 		}
 
+    sections := make([][2]int, 20)
+    sections[0][0] = 0
+    sections[0][1] = rheight_c1
+    sections[1][0] = rwidth_c1
+    sections[1][1] = rheight_c1
+    sections[2][0] = rwidth
+    sections[2][1] = rheight_c1
+    sections[3][0] = rwidth_c2
+    sections[3][1] = rheight_c1
+    sections[4][0] = WINDOW_WIDTH
+    sections[4][1] = rheight_c1
+
 		printf_tb(0, rheight_c1-1, COLOR[255], COLOR[0], "01")
 		printf_tb(rwidth_c1+1, rheight_c1-1, COLOR[255], COLOR[0], "02")
 		printf_tb(rwidth+1, rheight_c1-1, COLOR[255], COLOR[0], "03")
 		printf_tb(rwidth_c2+1, rheight_c1-1, COLOR[255], COLOR[0], "04")
 		printf_tb(WINDOW_WIDTH-2, rheight_c1-1, COLOR[255], COLOR[0], "05")
+
+    sections[5][0] = 0
+    sections[5][1] = rheight
+    sections[6][0] = rwidth_c1
+    sections[6][1] = rheight
+    sections[7][0] = rwidth
+    sections[7][1] = rheight
+    sections[8][0] = rwidth_c2
+    sections[8][1] = rheight
+    sections[9][0] = WINDOW_WIDTH
+    sections[9][1] = rheight
 
 		printf_tb(0, rheight-1, COLOR[255], COLOR[0], "06")
 		printf_tb(rwidth_c1+1, rheight-1, COLOR[255], COLOR[0], "07")
@@ -116,11 +139,33 @@ loop:
 		printf_tb(rwidth_c2+1, rheight-1, COLOR[255], COLOR[0], "09")
 		printf_tb(WINDOW_WIDTH-2, rheight-1, COLOR[255], COLOR[0], "10")
 
+    sections[10][0] = 0
+    sections[10][1] = rheight_c2
+    sections[11][0] = rwidth_c1
+    sections[11][1] = rheight_c2
+    sections[12][0] = rwidth
+    sections[12][1] = rheight_c2
+    sections[13][0] = rwidth_c2
+    sections[13][1] = rheight_c2
+    sections[14][0] = WINDOW_WIDTH
+    sections[14][1] = rheight_c2
+
 		printf_tb(0, rheight_c2-1, COLOR[255], COLOR[0], "11")
 		printf_tb(rwidth_c1+1, rheight_c2-1, COLOR[255], COLOR[0], "12")
 		printf_tb(rwidth+1, rheight_c2-1, COLOR[255], COLOR[0], "13")
 		printf_tb(rwidth_c2+1, rheight_c2-1, COLOR[255], COLOR[0], "14")
 		printf_tb(WINDOW_WIDTH-2, rheight_c2-1, COLOR[255], COLOR[0], "15")
+
+    sections[15][0] = 0
+    sections[15][1] = WINDOW_HEIGHT
+    sections[16][0] = rwidth_c1
+    sections[16][1] = WINDOW_HEIGHT
+    sections[17][0] = rwidth
+    sections[17][1] = WINDOW_HEIGHT
+    sections[18][0] = rwidth_c2
+    sections[18][1] = WINDOW_HEIGHT
+    sections[19][0] = WINDOW_WIDTH
+    sections[19][1] = WINDOW_HEIGHT
 
 		printf_tb(0, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], "16")
 		printf_tb(rwidth_c1+1, WINDOW_HEIGHT-1, COLOR[255], COLOR[0], "17")
@@ -143,7 +188,9 @@ loop:
 			//      start := rand.Intn(20)
 			//      end := rand.Intn(20)
 		}
-		path := connect(rwidth_c1, WINDOW_HEIGHT, 0, 0)
+    s1 := sections[rand.Intn(len(sections))]
+    s2 := sections[rand.Intn(len(sections))]
+		path := connect(s1[0], s1[1], s2[0], s2[1])
     pathX := 0
     pathY := 0
 		for i := 0; i < len(path); i++ {
@@ -155,7 +202,9 @@ loop:
 			printf_tb(pathX, pathY, COLOR[120], COLOR[0], "*")
 		}
 
-		path = connect(rwidth_c2+1, rheight_c2-1, rwidth_c1+1, rheight_c1-1)
+    s1 = sections[rand.Intn(len(sections))]
+    s2 = sections[rand.Intn(len(sections))]
+		path = connect(s1[0], s1[1], s2[0], s2[1])
 		pathX = rwidth_c1+1
 		pathY = rheight_c1-1
 		for i := 0; i < len(path); i++ {
@@ -192,15 +241,12 @@ func connect(startX, startY, endX, endY int) []int {
 	for i := 0; i < lenX; i++ {
 		path[i] = 1
 	}
-	for i := lenX; i < lenY; i++ {
-		path[i] = 0
-	}
-    dest := make([]int, len(path))
-    perm := rand.Perm(len(path))
-    for i, v := range perm {
-      dest[v] = path[i]
-    }
-	return dest 
+  dest := make([]int, len(path))
+  perm := rand.Perm(len(path))
+  for i, v := range perm {
+    dest[v] = path[i]
+  }
+	return dest
 }
 
 func print_tb(x, y int, fg, bg termbox.Attribute, msg string) {
