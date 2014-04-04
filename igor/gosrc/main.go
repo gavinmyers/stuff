@@ -56,7 +56,7 @@ loop:
 		rheight_c2 := rand.Intn((WINDOW_HEIGHT-rheight)/2) +
 			rheight + ((WINDOW_HEIGHT - rheight) / 4)
 
-    sections := make([][2]int, 20)
+    sections := make([][2]int, 25)
     sections[0][0] = 0
     sections[0][1] = rheight_c1
     sections[1][0] = rwidth_c1
@@ -97,6 +97,16 @@ loop:
     sections[18][1] = WINDOW_HEIGHT
     sections[19][0] = WINDOW_WIDTH
     sections[19][1] = WINDOW_HEIGHT
+    sections[20][0] = 0
+    sections[20][1] = 0
+    sections[21][0] = rwidth_c1
+    sections[21][1] = 0
+    sections[22][0] = rwidth
+    sections[22][1] = 0
+    sections[23][0] = rwidth_c2
+    sections[23][1] = 0
+    sections[24][0] = WINDOW_WIDTH
+    sections[24][1] = 0
 
 		printf_tb(0, 1, COLOR[32], COLOR[0], strconv.Itoa(WINDOW_WIDTH))
 		printf_tb(0, 2, COLOR[32], COLOR[0], strconv.Itoa(WINDOW_HEIGHT))
@@ -123,27 +133,6 @@ loop:
 				currentWidth++
 			}
 		}
-
-		currentWidth = 0
-		currentHeight = rheight
-		for i := 0; i < WINDOW_WIDTH; i++ {
-			termbox.SetCell(currentWidth,
-				currentHeight,
-				0x00A4,
-				COLOR[rand.Intn(len(COLOR))],
-				COLOR[rand.Intn(len(COLOR))])
-			if rand.Intn(3) == 1 {
-				currentHeight--
-			} else {
-				currentHeight++
-			}
-			if rand.Intn(3) == 1 {
-				currentWidth--
-			} else {
-				currentWidth++
-			}
-		}
-
 		for j := 0; j < WINDOW_WIDTH; j++ {
 			printf_tb(j, rheight, COLOR[16], COLOR[0], "-")
 			printf_tb(j, rheight_c1, COLOR[16], COLOR[0], "-")
@@ -190,9 +179,9 @@ loop:
 		printf_tb(rwidth-2, rheight+1, COLOR[120], COLOR[0], "SW")
 		printf_tb(rwidth+1, rheight+1, COLOR[120], COLOR[0], "SE")
 
-    for i := 0; i < rand.Intn(10) + 10; i++ {
-      s1 := sections[rand.Intn(len(sections))]
-      s2 := sections[rand.Intn(len(sections))]
+    s1 := sections[rand.Intn(len(sections))]
+    s2 := sections[rand.Intn(len(sections))]
+    for i := 0; i < 99; i++ {
       path := connect(s1[0], s1[1], s2[0], s2[1])
       pathX := s1[0]
       pathY := s1[1]
@@ -206,8 +195,10 @@ loop:
         } else if path[i] == DIR_SOUTH {
           pathY++
         }
-        printf_tb(pathX, pathY, COLOR[120], COLOR[0], "*")
+        printf_tb(pathX, pathY, COLOR[120], COLOR[0], ".")
       }
+      s2 = sections[rand.Intn(len(sections))]
+      s1 = sections[rand.Intn(len(sections))]
     }
 
 
