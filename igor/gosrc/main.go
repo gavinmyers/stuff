@@ -7,7 +7,6 @@ import "strconv"
 
 var WINDOW_WIDTH = 0
 var WINDOW_HEIGHT = 0
-
 var DIR_NORTH = 8
 var DIR_SOUTH = 2
 var DIR_WEST = 4
@@ -16,8 +15,12 @@ var DIR_NORTH_WEST = 7
 var DIR_NORTH_EAST = 9
 var DIR_SOUTH_WEST = 1
 var DIR_SOUTH_EAST = 3
-
 var COLOR [256]termbox.Attribute
+
+type Tile struct {
+  x int
+  y int
+}
 
 func init() {
 	err := termbox.Init()
@@ -179,28 +182,14 @@ loop:
 		printf_tb(rwidth-2, rheight+1, COLOR[120], COLOR[0], "SW")
 		printf_tb(rwidth+1, rheight+1, COLOR[120], COLOR[0], "SE")
 
-    s1 := sections[rand.Intn(len(sections))]
-    s2 := sections[rand.Intn(len(sections))]
     for i := 0; i < 99; i++ {
+      s1 := sections[rand.Intn(len(sections))]
+      s2 := sections[rand.Intn(len(sections))]
       path := connect(s1[0], s1[1], s2[0], s2[1])
-      pathX := s1[0]
-      pathY := s1[1]
       for i := 0; i < len(path); i++ {
-        if path[i] == DIR_WEST {
-          pathX--
-        } else if path[i] == DIR_EAST {
-          pathX++
-        } else if path[i] == DIR_NORTH {
-          pathY--
-        } else if path[i] == DIR_SOUTH {
-          pathY++
-        }
-        printf_tb(pathX, pathY, COLOR[120], COLOR[0], ".")
+        printf_tb(path[i].x, path[i].y, COLOR[120], COLOR[0], ".")
       }
-      s2 = sections[rand.Intn(len(sections))]
-      s1 = sections[rand.Intn(len(sections))]
     }
-
 
 		printf_tb((WINDOW_WIDTH/2)-8, 0, COLOR[32], COLOR[0], "--- I.G.O.R. ---")
 		termbox.Flush()
@@ -211,7 +200,7 @@ loop:
 	}
 }
 
-func connect(startX, startY, endX, endY int) []int {
+func connect(startX, startY, endX, endY int) []*Tile {
 	lenX := startX - endX
 	if lenX < 0 {
 		lenX = endX - startX
@@ -241,7 +230,23 @@ func connect(startX, startY, endX, endY int) []int {
   for i, v := range perm {
     dest[v] = path[i]
   }
-	return dest
+  tiles := make([]*Tile, lenT)
+  pathX := startX
+  pathY := startY
+  for i := 0; i < len(dest); i++ {
+    if dest[i] == DIR_WEST {
+      pathX--
+    } else if dest[i] == DIR_EAST {
+      pathX++
+    } else if dest[i] == DIR_NORTH {
+      pathY--
+    } else if dest[i] == DIR_SOUTH {
+      pathY++
+    }
+    t := &Tile {x:pathX, y:pathY}
+    tiles[i] = t
+  }
+	return tiles
 }
 
 func print_tb(x, y int, fg, bg termbox.Attribute, msg string) {
