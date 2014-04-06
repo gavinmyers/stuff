@@ -16,6 +16,7 @@ var DIR_NORTH_EAST = 9
 var DIR_SOUTH_WEST = 1
 var DIR_SOUTH_EAST = 3
 var COLOR [256]termbox.Attribute
+var MAP = make([][]*Tile, 0)
 
 type Tile struct {
   x int
@@ -40,6 +41,15 @@ func main() {
 loop:
 	for {
 		WINDOW_WIDTH, WINDOW_HEIGHT = termbox.Size()
+    MAP = make([][]*Tile, WINDOW_WIDTH)
+    for i := 0; i < WINDOW_WIDTH; i++ {
+      MAP[i] = make([]*Tile, WINDOW_HEIGHT)
+      for j := 0; j < WINDOW_HEIGHT; j++ {
+        t := &Tile {x:i, y:j}
+        MAP[i][j] = t
+      }
+    }
+
 		termbox.Clear(COLOR[0], COLOR[rand.Intn(len(COLOR))])
 
 		termbox.SetCell(0, 0, 0x253C, COLOR[255], COLOR[0])
@@ -245,6 +255,9 @@ func connect(startX, startY, endX, endY int) []*Tile {
     }
     t := &Tile {x:pathX, y:pathY}
     tiles[i] = t
+    if(pathX > 0 && pathY > 0) {
+      //MAP[pathX][pathY] = t
+    }
   }
 	return tiles
 }
