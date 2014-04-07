@@ -21,6 +21,7 @@ var MAP = make([][]*Tile, 0)
 type Tile struct {
   x int
   y int
+  i string
 }
 
 func init() {
@@ -37,19 +38,20 @@ func init() {
 func main() {
 	defer termbox.Close()
 	termbox.SetInputMode(termbox.InputEsc)
-	termbox.Clear(COLOR[0], COLOR[255])
-  WINDOW_WIDTH, WINDOW_HEIGHT = termbox.Size()
-  MAP = make([][]*Tile, WINDOW_WIDTH * 2)
-  for i := 0; i < WINDOW_WIDTH * 2; i++ {
-    MAP[i] = make([]*Tile, WINDOW_HEIGHT * 2)
-    for j := 0; j < WINDOW_HEIGHT * 2; j++ {
-      t := &Tile {x:i, y:j}
-      MAP[i][j] = t
-    }
-  }
-
 loop:
 	for {
+
+    termbox.Clear(COLOR[0], COLOR[255])
+    WINDOW_WIDTH, WINDOW_HEIGHT = termbox.Size()
+    MAP = make([][]*Tile, WINDOW_WIDTH * 2)
+    for i := 0; i < WINDOW_WIDTH * 2; i++ {
+      MAP[i] = make([]*Tile, WINDOW_HEIGHT * 2)
+      for j := 0; j < WINDOW_HEIGHT * 2; j++ {
+        t := &Tile {x:i, y:j, i: "#"}
+        MAP[i][j] = t
+      }
+    }
+
 
 		termbox.Clear(COLOR[0], COLOR[rand.Intn(len(COLOR))])
 
@@ -196,13 +198,18 @@ loop:
     for i := 0; i < 99; i++ {
       s1 := sections[rand.Intn(len(sections))]
       s2 := sections[rand.Intn(len(sections))]
-      path := connect(s1[0], s1[1], s2[0], s2[1])
-      for i := 0; i < len(path); i++ {
-        printf_tb(path[i].x, path[i].y, COLOR[120], COLOR[0], ".")
-      }
+      connect(s1[0], s1[1], s2[0], s2[1])
+      //for i := 0; i < len(path); i++ {
+      //  printf_tb(path[i].x, path[i].y, COLOR[120], COLOR[0], ".")
+      //}
     }
 
 		printf_tb((WINDOW_WIDTH/2)-8, 0, COLOR[32], COLOR[0], "--- I.G.O.R. ---")
+    for x := 0; x < len(MAP); x++ {
+      for y := 0; y < len(MAP[x]); y++ {
+        printf_tb(MAP[x][y].x, MAP[x][y].y, COLOR[120], COLOR[0], MAP[x][y].i)
+      }
+    }
 		termbox.Flush()
 		ev := termbox.PollEvent()
 		if ev.Key == termbox.KeyCtrlC {
@@ -254,7 +261,7 @@ func connect(startX, startY, endX, endY int) []*Tile {
     } else if dest[i] == DIR_SOUTH {
       pathY++
     }
-    t := &Tile {x:pathX, y:pathY}
+    t := &Tile {x:pathX, y:pathY, i:"."}
     tiles[i] = t
     if(pathX > 0 && pathY > 0) {
       MAP[pathX][pathY] = t
