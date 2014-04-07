@@ -41,17 +41,15 @@ func main() {
 loop:
 	for {
 
-    termbox.Clear(COLOR[0], COLOR[255])
     WINDOW_WIDTH, WINDOW_HEIGHT = termbox.Size()
     MAP = make([][]*Tile, WINDOW_WIDTH * 2)
     for i := 0; i < WINDOW_WIDTH * 2; i++ {
       MAP[i] = make([]*Tile, WINDOW_HEIGHT * 2)
       for j := 0; j < WINDOW_HEIGHT * 2; j++ {
-        t := &Tile {x:i, y:j, i: "#"}
+        t := &Tile {x:i, y:j, i: "▒"}
         MAP[i][j] = t
       }
     }
-
 
 		termbox.Clear(COLOR[0], COLOR[rand.Intn(len(COLOR))])
 
