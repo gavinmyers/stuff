@@ -38,17 +38,18 @@ func main() {
 	defer termbox.Close()
 	termbox.SetInputMode(termbox.InputEsc)
 	termbox.Clear(COLOR[0], COLOR[255])
+  WINDOW_WIDTH, WINDOW_HEIGHT = termbox.Size()
+  MAP = make([][]*Tile, WINDOW_WIDTH * 2)
+  for i := 0; i < WINDOW_WIDTH * 2; i++ {
+    MAP[i] = make([]*Tile, WINDOW_HEIGHT * 2)
+    for j := 0; j < WINDOW_HEIGHT * 2; j++ {
+      t := &Tile {x:i, y:j}
+      MAP[i][j] = t
+    }
+  }
+
 loop:
 	for {
-		WINDOW_WIDTH, WINDOW_HEIGHT = termbox.Size()
-    MAP = make([][]*Tile, WINDOW_WIDTH)
-    for i := 0; i < WINDOW_WIDTH; i++ {
-      MAP[i] = make([]*Tile, WINDOW_HEIGHT)
-      for j := 0; j < WINDOW_HEIGHT; j++ {
-        t := &Tile {x:i, y:j}
-        MAP[i][j] = t
-      }
-    }
 
 		termbox.Clear(COLOR[0], COLOR[rand.Intn(len(COLOR))])
 
@@ -256,7 +257,7 @@ func connect(startX, startY, endX, endY int) []*Tile {
     t := &Tile {x:pathX, y:pathY}
     tiles[i] = t
     if(pathX > 0 && pathY > 0) {
-      //MAP[pathX][pathY] = t
+      MAP[pathX][pathY] = t
     }
   }
 	return tiles
