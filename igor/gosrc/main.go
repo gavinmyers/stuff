@@ -4,7 +4,7 @@ import "github.com/limetext/termbox-go"
 import "fmt"
 import "./igor"
 import "math/rand"
-import "strconv"
+//import "strconv"
 
 var COLOR [256]termbox.Attribute
 var MAP *igor.Map
@@ -26,87 +26,49 @@ func main() {
 	termbox.SetInputMode(termbox.InputEsc)
 loop:
 	for {
-
     igor.WinWidth, igor.WinHeight = termbox.Size()
-    MAP = &igor.Map {Tiles:make([][]*igor.Tile, igor.WinWidth * 2)}
-    for i := 0; i < igor.WinWidth * 2; i++ {
-      MAP.Tiles[i] = make([]*igor.Tile, igor.WinHeight * 2)
-      for j := 0; j < igor.WinHeight * 2; j++ {
-        t := &igor.Tile {X:i, Y:j, I: "▒"}
-        MAP.Tiles[i][j] = t
+    MAP = igor.EmptyMap(igor.WinWidth, igor.WinHeight)
+    termbox.Clear(COLOR[0], COLOR[rand.Intn(len(COLOR))])
+    sections := igor.SplitMap(igor.WinWidth, igor.WinHeight) 
+    for i := 0; i < 99; i++ {
+      s1 := sections[rand.Intn(len(sections))]
+      s2 := sections[rand.Intn(len(sections))]
+      igor.Connect(s1.X, s1.Y, s2.X, s2.Y, MAP)
+    }
+    for x := 0; x < len(MAP.Tiles); x++ {
+      row := MAP.Tiles[x]
+      for y := 0; y < len(MAP.Tiles[x]); y++ {
+        t := row[y]
+        printf_tb(t.X, t.Y, COLOR[120], COLOR[0], t.I)
       }
     }
+    printf_tb((igor.WinWidth/2)-8, 0, COLOR[32], COLOR[0], "--- I.G.O.R. ---")
+    termbox.Flush()
+    ev := termbox.PollEvent()
+    if ev.Key == termbox.KeyCtrlC {
+      break loop
+    }
+  }
+}
 
-		termbox.Clear(COLOR[0], COLOR[rand.Intn(len(COLOR))])
 
+func print_tb(x, y int, fg, bg termbox.Attribute, msg string) {
+	for _, c := range msg {
+		termbox.SetCell(x, y, c, fg, bg)
+		x++
+	}
+}
+
+func printf_tb(x, y int, fg, bg termbox.Attribute, format string, args ...interface{}) {
+	s := fmt.Sprintf(format, args...)
+	print_tb(x, y, fg, bg, s)
+}
+
+/*
 		termbox.SetCell(0, 0, 0x253C, COLOR[255], COLOR[0])
 		termbox.SetCell(igor.WinWidth-1, 0, 0x253C, COLOR[255], COLOR[0])
 		termbox.SetCell(igor.WinWidth-1, igor.WinHeight-1, 0x253C, COLOR[255], COLOR[0])
 		termbox.SetCell(0, igor.WinHeight-1, 0x253C, COLOR[255], COLOR[0])
-
-		rwidth := rand.Intn(igor.WinWidth/2) + igor.WinWidth/4
-
-		rwidth_c1 := rand.Intn(rwidth/2) + rwidth/4
-		rwidth_c2 := rand.Intn((igor.WinWidth-rwidth)/2) +
-			rwidth + ((igor.WinWidth - rwidth) / 4)
-
-		rheight := rand.Intn(igor.WinHeight/2) + igor.WinHeight/4
-
-		rheight_c1 := rand.Intn(rheight/2) + rheight/4
-		rheight_c2 := rand.Intn((igor.WinHeight-rheight)/2) +
-			rheight + ((igor.WinHeight - rheight) / 4)
-
-    sections := make([][2]int, 25)
-    sections[0][0] = 0
-    sections[0][1] = rheight_c1
-    sections[1][0] = rwidth_c1
-    sections[1][1] = rheight_c1
-    sections[2][0] = rwidth
-    sections[2][1] = rheight_c1
-    sections[3][0] = rwidth_c2
-    sections[3][1] = rheight_c1
-    sections[4][0] = igor.WinWidth
-    sections[4][1] = rheight_c1
-    sections[5][0] = 0
-    sections[5][1] = rheight
-    sections[6][0] = rwidth_c1
-    sections[6][1] = rheight
-    sections[7][0] = rwidth
-    sections[7][1] = rheight
-    sections[8][0] = rwidth_c2
-    sections[8][1] = rheight
-    sections[9][0] = igor.WinWidth
-    sections[9][1] = rheight
-    sections[10][0] = 0
-    sections[10][1] = rheight_c2
-    sections[11][0] = rwidth_c1
-    sections[11][1] = rheight_c2
-    sections[12][0] = rwidth
-    sections[12][1] = rheight_c2
-    sections[13][0] = rwidth_c2
-    sections[13][1] = rheight_c2
-    sections[14][0] = igor.WinWidth
-    sections[14][1] = rheight_c2
-    sections[15][0] = 0
-    sections[15][1] = igor.WinHeight
-    sections[16][0] = rwidth_c1
-    sections[16][1] = igor.WinHeight
-    sections[17][0] = rwidth
-    sections[17][1] = igor.WinHeight
-    sections[18][0] = rwidth_c2
-    sections[18][1] = igor.WinHeight
-    sections[19][0] = igor.WinWidth
-    sections[19][1] = igor.WinHeight
-    sections[20][0] = 0
-    sections[20][1] = 0
-    sections[21][0] = rwidth_c1
-    sections[21][1] = 0
-    sections[22][0] = rwidth
-    sections[22][1] = 0
-    sections[23][0] = rwidth_c2
-    sections[23][1] = 0
-    sections[24][0] = igor.WinWidth
-    sections[24][1] = 0
 
 		printf_tb(0, 1, COLOR[32], COLOR[0], strconv.Itoa(igor.WinWidth))
 		printf_tb(0, 2, COLOR[32], COLOR[0], strconv.Itoa(igor.WinHeight))
@@ -179,37 +141,4 @@ loop:
 		printf_tb(rwidth-2, rheight+1, COLOR[120], COLOR[0], "SW")
 		printf_tb(rwidth+1, rheight+1, COLOR[120], COLOR[0], "SE")
 
-    for i := 0; i < 99; i++ {
-      s1 := sections[rand.Intn(len(sections))]
-      s2 := sections[rand.Intn(len(sections))]
-      igor.Connect(s1[0], s1[1], s2[0], s2[1], MAP)
-    }
-
-		printf_tb((igor.WinWidth/2)-8, 0, COLOR[32], COLOR[0], "--- I.G.O.R. ---")
-    for x := 0; x < len(MAP.Tiles); x++ {
-      row := MAP.Tiles[x]
-      for y := 0; y < len(MAP.Tiles[x]); y++ {
-        t := row[y]
-        printf_tb(t.X, t.Y, COLOR[120], COLOR[0], t.I)
-      }
-    }
-		termbox.Flush()
-		ev := termbox.PollEvent()
-		if ev.Key == termbox.KeyCtrlC {
-			break loop
-		}
-	}
-}
-
-
-func print_tb(x, y int, fg, bg termbox.Attribute, msg string) {
-	for _, c := range msg {
-		termbox.SetCell(x, y, c, fg, bg)
-		x++
-	}
-}
-
-func printf_tb(x, y int, fg, bg termbox.Attribute, format string, args ...interface{}) {
-	s := fmt.Sprintf(format, args...)
-	print_tb(x, y, fg, bg, s)
-}
+*/
