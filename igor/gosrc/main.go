@@ -2,6 +2,7 @@ package main
 
 import "github.com/limetext/termbox-go"
 import "fmt"
+import "./igor"
 import "math/rand"
 import "strconv"
 
@@ -16,13 +17,8 @@ var DIR_NORTH_EAST = 9
 var DIR_SOUTH_WEST = 1
 var DIR_SOUTH_EAST = 3
 var COLOR [256]termbox.Attribute
-var MAP = make([][]*Tile, 0)
+var MAP *igor.Map
 
-type Tile struct {
-  x int
-  y int
-  i string
-}
 
 func init() {
 	err := termbox.Init()
@@ -42,12 +38,12 @@ loop:
 	for {
 
     WINDOW_WIDTH, WINDOW_HEIGHT = termbox.Size()
-    MAP = make([][]*Tile, WINDOW_WIDTH * 2)
+    MAP = &igor.Map {Tiles:make([][]*igor.Tile, WINDOW_WIDTH * 2)}
     for i := 0; i < WINDOW_WIDTH * 2; i++ {
-      MAP[i] = make([]*Tile, WINDOW_HEIGHT * 2)
+      MAP.Tiles[i] = make([]*igor.Tile, WINDOW_HEIGHT * 2)
       for j := 0; j < WINDOW_HEIGHT * 2; j++ {
-        t := &Tile {x:i, y:j, i: "▒"}
-        MAP[i][j] = t
+        t := &igor.Tile {X:i, Y:j, I: "▒"}
+        MAP.Tiles[i][j] = t
       }
     }
 
@@ -203,9 +199,11 @@ loop:
     }
 
 		printf_tb((WINDOW_WIDTH/2)-8, 0, COLOR[32], COLOR[0], "--- I.G.O.R. ---")
-    for x := 0; x < len(MAP); x++ {
-      for y := 0; y < len(MAP[x]); y++ {
-        printf_tb(MAP[x][y].x, MAP[x][y].y, COLOR[120], COLOR[0], MAP[x][y].i)
+    for x := 0; x < len(MAP.Tiles); x++ {
+      row := MAP.Tiles[x]
+      for y := 0; y < len(MAP.Tiles[x]); y++ {
+        t := row[y]
+        printf_tb(t.X, t.Y, COLOR[120], COLOR[0], t.I)
       }
     }
 		termbox.Flush()
@@ -216,7 +214,7 @@ loop:
 	}
 }
 
-func connect(startX, startY, endX, endY int) []*Tile {
+func connect(startX, startY, endX, endY int) []*igor.Tile {
 	lenX := startX - endX
 	if lenX < 0 {
 		lenX = endX - startX
@@ -246,7 +244,7 @@ func connect(startX, startY, endX, endY int) []*Tile {
   for i, v := range perm {
     dest[v] = path[i]
   }
-  tiles := make([]*Tile, lenT)
+  tiles := make([]*igor.Tile, lenT)
   pathX := startX
   pathY := startY
   for i := 0; i < len(dest); i++ {
@@ -259,10 +257,10 @@ func connect(startX, startY, endX, endY int) []*Tile {
     } else if dest[i] == DIR_SOUTH {
       pathY++
     }
-    t := &Tile {x:pathX, y:pathY, i:"."}
+    t := &igor.Tile {X:pathX, Y:pathY, I:"."}
     tiles[i] = t
     if(pathX > 0 && pathY > 0) {
-      MAP[pathX][pathY] = t
+      MAP.Tiles[pathX][pathY] = t
     }
   }
 	return tiles
