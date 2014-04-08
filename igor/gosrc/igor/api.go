@@ -14,16 +14,16 @@ func Connect(startX, startY, endX, endY int, m *Map) {
 	path := make([]int, lenT, lenT)
 	for i := 0; i < lenT; i++ {
     if(startY > endY) {
-      path[i] = DIR_NORTH
+      path[i] = DirNorth
     } else {
-      path[i] = DIR_SOUTH
+      path[i] = DirSouth
     }
   }
 	for i := 0; i < lenX; i++ {
     if(startX > startY) {
-      path[i] = DIR_WEST
+      path[i] = DirWest
     } else {
-      path[i] = DIR_EAST
+      path[i] = DirEast
     }
 	}
   dest := make([]int, len(path))
@@ -35,13 +35,13 @@ func Connect(startX, startY, endX, endY int, m *Map) {
   pathX := startX
   pathY := startY
   for i := 0; i < len(dest); i++ {
-    if dest[i] == DIR_WEST {
+    if dest[i] == DirWest {
       pathX--
-    } else if dest[i] == DIR_EAST {
+    } else if dest[i] == DirEast {
       pathX++
-    } else if dest[i] == DIR_NORTH {
+    } else if dest[i] == DirNorth {
       pathY--
-    } else if dest[i] == DIR_SOUTH {
+    } else if dest[i] == DirSouth {
       pathY++
     }
     t := &Tile {X:pathX, Y:pathY, I:"."}
