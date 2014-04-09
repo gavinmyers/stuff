@@ -1,8 +1,8 @@
 package igor
 import "math/rand"
 
-func SplitMap(w,h int) []*Tile {
-  tiles :=  make([]*Tile, 20)
+func Split(w,h int) []*Tile {
+  tiles :=  make([]*Tile, 25)
   rwidth := rand.Intn(w/2) + w/4
 
   rwidth_c1 := rand.Intn(rwidth/2) + rwidth/4
@@ -39,11 +39,18 @@ func SplitMap(w,h int) []*Tile {
   tiles[18] = &Tile {X:rwidth_c2, Y:0, I: "X"}
   tiles[19] = &Tile {X:w, Y:0, I: "X"}
 
+  tiles[20] = &Tile {X:0, Y:h, I: "X"}
+  tiles[21] = &Tile {X:rwidth_c1, Y:h, I: "X"}
+  tiles[22] = &Tile {X:rwidth, Y:h, I: "X"}
+  tiles[23] = &Tile {X:rwidth_c2, Y:h, I: "X"}
+  tiles[24] = &Tile {X:w, Y:h, I: "X"}
+
+
 
   return tiles
 }
 
-func EmptyMap(w,h int) *Map {
+func Clear(w,h int) *Map {
   m := &Map {Tiles:make([][]*Tile, w * 2)}
   for i := 0; i < w * 2; i++ {
     m.Tiles[i] = make([]*Tile, h * 2)
@@ -56,7 +63,11 @@ func EmptyMap(w,h int) *Map {
   return m
 }
 
-func Connect(startX, startY, endX, endY int, m *Map) {
+func Connect(t1,t2 *Tile, m *Map) {
+  startX := t1.X
+  startY := t1.Y
+  endX := t2.X
+  endY := t2.Y
 	lenX := startX - endX
 	if lenX < 0 {
 		lenX = endX - startX

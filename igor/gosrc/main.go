@@ -24,22 +24,22 @@ func init() {
 func main() {
 	defer termbox.Close()
 	termbox.SetInputMode(termbox.InputEsc)
+  termbox.Clear(COLOR[0], COLOR[rand.Intn(len(COLOR))])
 loop:
 	for {
     igor.WinWidth, igor.WinHeight = termbox.Size()
-    MAP = igor.EmptyMap(igor.WinWidth, igor.WinHeight)
-    termbox.Clear(COLOR[0], COLOR[rand.Intn(len(COLOR))])
-    sections := igor.SplitMap(igor.WinWidth, igor.WinHeight) 
+    MAP = igor.Clear(igor.WinWidth, igor.WinHeight)
+    sections := igor.Split(igor.WinWidth, igor.WinHeight)
     for i := 0; i < 99; i++ {
       s1 := sections[rand.Intn(len(sections))]
       s2 := sections[rand.Intn(len(sections))]
-      igor.Connect(s1.X, s1.Y, s2.X, s2.Y, MAP)
+      igor.Connect(s1, s2, MAP)
     }
     for x := 0; x < len(MAP.Tiles); x++ {
       row := MAP.Tiles[x]
       for y := 0; y < len(MAP.Tiles[x]); y++ {
         t := row[y]
-        printf_tb(t.X, t.Y, COLOR[120], COLOR[0], t.I)
+        printf_tb(t.X, t.Y, COLOR[rand.Intn(len(COLOR))], COLOR[0], t.I)
       }
     }
     printf_tb((igor.WinWidth/2)-8, 0, COLOR[32], COLOR[0], "--- I.G.O.R. ---")
