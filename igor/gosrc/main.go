@@ -17,16 +17,17 @@ func main() {
 	defer termbox.Close()
 	termbox.SetInputMode(termbox.InputEsc)
   gruyere.Clear()
+  igor.WinWidth, igor.WinHeight = termbox.Size()
+  sections := igor.Split(igor.WinWidth, igor.WinHeight)
+  MAP = igor.Clear(igor.WinWidth, igor.WinHeight)
+  for i := 0; i < 99; i++ {
+    s1 := sections[rand.Intn(len(sections))]
+    s2 := sections[rand.Intn(len(sections))]
+    igor.Connect(s1, s2, MAP)
+  }
+
 loop:
 	for {
-    igor.WinWidth, igor.WinHeight = termbox.Size()
-    MAP = igor.Clear(igor.WinWidth, igor.WinHeight)
-    sections := igor.Split(igor.WinWidth, igor.WinHeight)
-    for i := 0; i < 99; i++ {
-      s1 := sections[rand.Intn(len(sections))]
-      s2 := sections[rand.Intn(len(sections))]
-      igor.Connect(s1, s2, MAP)
-    }
     for x := 0; x < len(MAP.Tiles); x++ {
       row := MAP.Tiles[x]
       for y := 0; y < len(MAP.Tiles[x]); y++ {
