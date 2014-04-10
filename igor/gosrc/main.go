@@ -12,7 +12,6 @@ var MAP *igor.Map
 var WALL = &megaman.Sprite {Id:256, Code:"#"}
 var VOID = &megaman.Sprite {Id:128, Code:"."}
 
-
 func init() {
   gruyere.Init()
 }
