@@ -18,6 +18,12 @@ type Sprite struct {
 }
 
 
+type World struct {
+  Areas []*Area
+  Maps []*Map
+  Things []*Thing
+}
+
 type Terrain int32
 const (
    Ocean Terrain = 1
@@ -29,12 +35,6 @@ const (
    River Terrain = 7
    Lake Terrain = 8
 )
-
-type World struct {
-  Areas []*Area
-  Maps []*Map
-  Things []*Thing
-}
 
 type Area struct {
   World *World
