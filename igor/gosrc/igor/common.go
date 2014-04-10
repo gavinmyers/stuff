@@ -15,7 +15,6 @@ type Tile struct {
   Z int
   X int
   Y int
-  I string
 }
 
 

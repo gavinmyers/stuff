@@ -4,10 +4,14 @@ import "github.com/limetext/termbox-go"
 import "./igor"
 import "./gruyere"
 import "./moo"
+import "./megaman"
 import "math/rand"
 
 var WORLD moo.World
 var MAP *igor.Map
+
+var WALL = &megaman.Sprite {Id:256, Code:"#"}
+var VOID = &megaman.Sprite {Id:128, Code:"."}
 
 
 func init() {
@@ -32,7 +36,7 @@ loop:
       row := MAP.Tiles[x]
       for y := 0; y < len(MAP.Tiles[x]); y++ {
         t := row[y]
-        gruyere.Draw(t.X, t.Y, gruyere.Color[rand.Intn(len(gruyere.Color))], gruyere.Color[0], t.I)
+        gruyere.Draw(t.X, t.Y, gruyere.Color[rand.Intn(len(gruyere.Color))], gruyere.Color[0],"?")
       }
     }
     gruyere.Draw((igor.WinWidth/2)-8, 0, gruyere.Color[32], gruyere.Color[0], "--- I.G.O.R. ---")

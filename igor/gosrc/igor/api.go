@@ -15,35 +15,35 @@ func Split(w,h int) []*Tile {
   rheight_c2 := rand.Intn((h-rheight)/2) +
     rheight + ((h - rheight) / 4)
 
-  tiles[0] = &Tile {X:0, Y:rheight_c1, I: "X"}
-  tiles[1] = &Tile {X:rwidth_c1, Y:rheight_c1, I: "X"}
-  tiles[2] = &Tile {X:rwidth, Y:rheight_c1, I: "X"}
-  tiles[3] = &Tile {X:rwidth_c2, Y:rheight_c1, I: "X"}
-  tiles[4] = &Tile {X:w, Y:rheight_c1, I: "X"}
+  tiles[0] = &Tile {X:0, Y:rheight_c1}
+  tiles[1] = &Tile {X:rwidth_c1, Y:rheight_c1}
+  tiles[2] = &Tile {X:rwidth, Y:rheight_c1}
+  tiles[3] = &Tile {X:rwidth_c2, Y:rheight_c1}
+  tiles[4] = &Tile {X:w, Y:rheight_c1}
 
-  tiles[5] = &Tile {X:0, Y:rheight, I: "X"}
-  tiles[6] = &Tile {X:rwidth_c1, Y:rheight, I: "X"}
-  tiles[7] = &Tile {X:rwidth, Y:rheight, I: "X"}
-  tiles[8] = &Tile {X:rwidth_c2, Y:rheight, I: "X"}
-  tiles[9] = &Tile {X:w, Y:rheight, I: "X"}
+  tiles[5] = &Tile {X:0, Y:rheight}
+  tiles[6] = &Tile {X:rwidth_c1, Y:rheight}
+  tiles[7] = &Tile {X:rwidth, Y:rheight}
+  tiles[8] = &Tile {X:rwidth_c2, Y:rheight}
+  tiles[9] = &Tile {X:w, Y:rheight}
 
-  tiles[10] = &Tile {X:0, Y:rheight_c2, I: "X"}
-  tiles[11] = &Tile {X:rwidth_c1, Y:rheight_c2, I: "X"}
-  tiles[12] = &Tile {X:rwidth, Y:rheight_c2, I: "X"}
-  tiles[13] = &Tile {X:rwidth_c2, Y:rheight_c2, I: "X"}
-  tiles[14] = &Tile {X:w, Y:rheight_c2, I: "X"}
+  tiles[10] = &Tile {X:0, Y:rheight_c2}
+  tiles[11] = &Tile {X:rwidth_c1, Y:rheight_c2}
+  tiles[12] = &Tile {X:rwidth, Y:rheight_c2}
+  tiles[13] = &Tile {X:rwidth_c2, Y:rheight_c2}
+  tiles[14] = &Tile {X:w, Y:rheight_c2}
 
-  tiles[15] = &Tile {X:0, Y:0, I: "X"}
-  tiles[16] = &Tile {X:rwidth_c1, Y:0, I: "X"}
-  tiles[17] = &Tile {X:rwidth, Y:0, I: "X"}
-  tiles[18] = &Tile {X:rwidth_c2, Y:0, I: "X"}
-  tiles[19] = &Tile {X:w, Y:0, I: "X"}
+  tiles[15] = &Tile {X:0, Y:0}
+  tiles[16] = &Tile {X:rwidth_c1, Y:0}
+  tiles[17] = &Tile {X:rwidth, Y:0}
+  tiles[18] = &Tile {X:rwidth_c2, Y:0}
+  tiles[19] = &Tile {X:w, Y:0}
 
-  tiles[20] = &Tile {X:0, Y:h, I: "X"}
-  tiles[21] = &Tile {X:rwidth_c1, Y:h, I: "X"}
-  tiles[22] = &Tile {X:rwidth, Y:h, I: "X"}
-  tiles[23] = &Tile {X:rwidth_c2, Y:h, I: "X"}
-  tiles[24] = &Tile {X:w, Y:h, I: "X"}
+  tiles[20] = &Tile {X:0, Y:h}
+  tiles[21] = &Tile {X:rwidth_c1, Y:h}
+  tiles[22] = &Tile {X:rwidth, Y:h}
+  tiles[23] = &Tile {X:rwidth_c2, Y:h}
+  tiles[24] = &Tile {X:w, Y:h}
 
 
 
@@ -55,7 +55,7 @@ func Clear(w,h int) *Map {
   for i := 0; i < w * 2; i++ {
     m.Tiles[i] = make([]*Tile, h * 2)
     for j := 0; j < h * 2; j++ {
-      t := &Tile {X:i, Y:j, I: "▒"}
+      t := &Tile {X:i, Y:j}
       m.Tiles[i][j] = t
     }
   }
@@ -107,7 +107,7 @@ func Connect(t1,t2 *Tile, m *Map) {
     } else if path[v] == DirSouth {
       pathY++
     }
-    t := &Tile {X:pathX, Y:pathY, I:"."}
+    t := &Tile {X:pathX, Y:pathY}
     tiles[i] = t
     if(pathX > 0 && pathY > 0) {
       m.Tiles[pathX][pathY] = t
