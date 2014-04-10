@@ -13,6 +13,11 @@ func Init() {
 	for i := 0; i < 255; i++ {
 		Color[i] = termbox.Attribute(i)
 	}
+	termbox.SetInputMode(termbox.InputEsc)
+}
+
+func Size() (int, int){
+  return termbox.Size()
 }
 
 func Clear() {
@@ -32,4 +37,6 @@ func Draw(x, y int, fg, bg termbox.Attribute, format string, args ...interface{}
 	print_tb(x, y, fg, bg, s)
 }
 
-
+func Flush() {
+  termbox.Flush()
+}

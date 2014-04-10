@@ -3,9 +3,10 @@ package main
 import "github.com/limetext/termbox-go"
 import "./igor"
 import "./gruyere"
+import "./moo"
 import "math/rand"
-//import "strconv"
 
+var WORLD moo.World
 var MAP *igor.Map
 
 
@@ -15,9 +16,8 @@ func init() {
 
 func main() {
 	defer termbox.Close()
-	termbox.SetInputMode(termbox.InputEsc)
   gruyere.Clear()
-  igor.WinWidth, igor.WinHeight = termbox.Size()
+  igor.WinWidth, igor.WinHeight = gruyere.Size()
   sections := igor.Split(igor.WinWidth, igor.WinHeight)
   MAP = igor.Clear(igor.WinWidth, igor.WinHeight)
   for i := 0; i < 99; i++ {
@@ -36,7 +36,7 @@ loop:
       }
     }
     gruyere.Draw((igor.WinWidth/2)-8, 0, gruyere.Color[32], gruyere.Color[0], "--- I.G.O.R. ---")
-    termbox.Flush()
+    gruyere.Flush()
     ev := termbox.PollEvent()
     if ev.Key == termbox.KeyCtrlC {
       break loop
