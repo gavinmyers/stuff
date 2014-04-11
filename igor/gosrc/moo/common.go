@@ -1,23 +1,5 @@
 package moo
 
-//#0
-type Thing struct {
-  Id int
-  Parent *Thing
-  World *World
-  Area *Area
-  Map *Map
-  Tile *Tile
-  Children []*Thing
-  Sprite Sprite
-}
-
-type Sprite struct {
-  Id int
-  Code string
-}
-
-
 type World struct {
   Areas []*Area
   Maps []*Map
@@ -58,6 +40,5 @@ type Tile struct {
   X int
   Y int
   Things []*Thing
+  Sprite Sprite
 }
-
-
