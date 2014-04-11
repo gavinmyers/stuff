@@ -23,6 +23,15 @@ func (c *GUI) Init() {
   c.Width, c.Height = termbox.Size()
 }
 
+func (c *GUI) Flush() {
+  termbox.Flush()
+}
+
+func (c *GUI) PollEvent() termbox.Key {
+  ev := termbox.PollEvent()
+  return ev.Key
+}
+
 func (c *GUI) Draw(x, y int, fg, bg termbox.Attribute, format string, args ...interface{}) {
 	s := fmt.Sprintf(format, args...)
 	c.print_tb(x, y, fg, bg, s)
