@@ -11,11 +11,10 @@ func main() {
   gui.Init()
 loop:
 	for {
-    gui.Draw(25,25,gui.Color[0],gui.Color[255],"@")
-
-    termbox.Flush()
-    ev := termbox.PollEvent()
-    if ev.Key == termbox.KeyCtrlC {
+    gui.Draw(25,25,gui.Color[125],gui.Color[25],"@")
+    gui.Flush()
+    key := gui.PollEvent()
+    if key == termbox.KeyCtrlC {
       break loop
     }
   }
