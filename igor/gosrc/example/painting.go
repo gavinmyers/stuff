@@ -18,6 +18,10 @@ type Tile struct {
 	qml.Object
 }
 
+type Sprite struct {
+	qml.Object
+}
+
 func (r *Tile) Paint(p *qml.Painter) {
 	width := gl.Float(r.Int("width"))
 	height := gl.Float(r.Int("height"))
