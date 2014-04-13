@@ -14,17 +14,17 @@ func main() {
 	}
 }
 
-type GoRect struct {
+type Tile struct {
 	qml.Object
 }
 
-func (r *GoRect) Paint(p *qml.Painter) {
+func (r *Tile) Paint(p *qml.Painter) {
 	width := gl.Float(r.Int("width"))
 	height := gl.Float(r.Int("height"))
 
 	gl.Enable(gl.BLEND)
 	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-	gl.Color4f(1.0, 1.0, 1.0, 0.8)
+	gl.Color4f(1.0, 1.0, 1.0, 1.0)
 	gl.Begin(gl.QUADS)
 	gl.Vertex2f(0, 0)
 	gl.Vertex2f(width, 0)
@@ -32,8 +32,8 @@ func (r *GoRect) Paint(p *qml.Painter) {
 	gl.Vertex2f(0, height)
 	gl.End()
 
-	gl.LineWidth(5.5)
-	gl.Color4f(0.0, 0.0, 0.0, 1.0)
+	gl.LineWidth(0.5)
+	gl.Color4f(1.0, 1.0, 1.0, 1.0)
 	gl.Begin(gl.LINES)
 	gl.Vertex2f(0, 0)
 	gl.Vertex2f(width, height)
@@ -46,7 +46,7 @@ func run() error {
 	qml.Init(nil)
 
 	qml.RegisterTypes("GoExtensions", 1, 0, []qml.TypeSpec{{
-		Init: func(r *GoRect, obj qml.Object) { r.Object = obj },
+		Init: func(r *Tile, obj qml.Object) { r.Object = obj },
 	}})
 
 	engine := qml.NewEngine()
