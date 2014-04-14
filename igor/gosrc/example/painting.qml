@@ -7,9 +7,10 @@ Rectangle {
       x: 0
       y: 0
       Timer {
-         interval: 100; running: true; repeat: true
+         interval: 5; running: true; repeat: true
          onTriggered: game.update() 
       }
+
     }
 
     width: 1260 
@@ -19,6 +20,7 @@ Rectangle {
       id: player
       x: 640
       y: 480
+      z:999
       Timer {
          interval: 50; running: true; repeat: true
          onTriggered: player.update() 
@@ -29,22 +31,29 @@ Rectangle {
         height: 18
         clip: true
         Image {
-            id: playerImg 
             x: 0 
             y: -17 
             source: "DawnLike_1/Characters/Player0.png" 
         }
       }
     }
-    Image {
-        id: playerImg2 
-        x: 200 
-        y: 200 
-        source: "DawnLike_1/Characters/Player0.png" 
-    }
     MouseArea {
         anchors.fill: parent
         onClicked: player.handleClick(mouse.x, mouse.y)
+    }
+
+    property var floor: Component {
+      Rectangle {
+        z:0
+        width:16
+        height:18
+        clip: true
+        Image {
+          x: -32 
+          y: -128
+          source: "DawnLike_1/Objects/Floor.png" 
+        }
+      }
     }
 
 }

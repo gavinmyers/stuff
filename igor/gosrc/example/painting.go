@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
+  "math/rand"
 	"gopkg.in/qml.v0"
 	"os"
 )
+
+var Root qml.Object
 
 func main() {
 	if err := run(); err != nil {
@@ -19,20 +22,39 @@ type Player struct {
 type Game struct {
 	qml.Object
 }
-
+type Floor struct {
+	qml.Object
+}
 func (r *Player) HandleClick(xPos, yPos int) {
 	r.Set("x", r.Int("x")+40)
 	r.Set("y", r.Int("y")+40)
 }
 
 func (r *Player) Update() {
+	r.Set("x", r.Int("x")-2)
+	r.Set("y", r.Int("y")-2)
+
+
 }
+
 func (r *Game) Update() {
+  for i := 0; i < 100; i++ {
+    t := Root.Object("floor")
+    c := t.Create(nil)
+    c.Set("x",rand.Intn(1260))
+    c.Set("y",rand.Intn(960))
+    c.Set("enabled", true)
+    c.Set("parent",Root)
+  }
+
 }
 func (r *Player) Paint(p *qml.Painter) {
 }
 
 func (r *Game) Paint(p *qml.Painter) {
+}
+
+func (r *Floor) Paint(p *qml.Painter) {
 }
 
 func run() error {
@@ -41,6 +63,7 @@ func run() error {
 	qml.RegisterTypes("GoExtensions", 1, 0, []qml.TypeSpec{
 		{Init: func(g *Game, obj qml.Object) { g.Object = obj }},
 		{Init: func(g *Player, obj qml.Object) { g.Object = obj }},
+		{Init: func(g *Floor, obj qml.Object) { g.Object = obj }},
 	})
 
 	engine := qml.NewEngine()
@@ -50,6 +73,7 @@ func run() error {
 	}
 
 	win := component.CreateWindow(nil)
+  Root = win.Root()
 	win.Show()
 	win.Wait()
 
