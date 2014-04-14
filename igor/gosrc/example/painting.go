@@ -16,7 +16,6 @@ func main() {
 type Player struct {
 	qml.Object
 }
-
 type Game struct {
 	qml.Object
 }
@@ -24,26 +23,18 @@ type Game struct {
 func (r *Player) HandleClick(xPos, yPos int) {
 	r.Set("x", r.Int("x")+40)
 	r.Set("y", r.Int("y")+40)
-
 }
+
 func (r *Player) Update() {
-	//  r.Set("x",r.Int("x") - 2)
-	//  r.Set("y",r.Int("y") - 2)
 }
 func (r *Game) Update() {
-	//  r.Set("x",r.Int("x") - 2)
-	//  r.Set("y",r.Int("y") - 2)
 }
-
 func (r *Player) Paint(p *qml.Painter) {
-	r.Set("targetX", 0)
-	r.Set("x", 0)
-	r.Set("targetY", 0)
-	r.Set("y", 0)
 }
 
 func (r *Game) Paint(p *qml.Painter) {
 }
+
 func run() error {
 	qml.Init(nil)
 
