@@ -12,6 +12,10 @@ Rectangle {
       id: player
       x: 640
       y: 480
+      Timer {
+         interval: 500; running: true; repeat: true
+         onTriggered: player.update() 
+      }
       Item {
         id: playerRect 
         width: 16

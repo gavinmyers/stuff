@@ -22,6 +22,11 @@ func (r *Player) HandleClick(xPos, yPos int) {
   r.Set("y",r.Int("y") - 1)
 
 }
+func (r *Player) Update() {
+  r.Set("x",r.Int("x") - 1)
+  r.Set("y",r.Int("y") - 1)
+
+}
 
 func (r *Player) Paint(p *qml.Painter) {
   r.Set("targetX",0)
