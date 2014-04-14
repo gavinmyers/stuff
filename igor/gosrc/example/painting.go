@@ -17,30 +17,40 @@ type Player struct {
 	qml.Object
 }
 
+type Game struct {
+	qml.Object
+}
+
 func (r *Player) HandleClick(xPos, yPos int) {
-  r.Set("x",r.Int("x") - 1)
-  r.Set("y",r.Int("y") - 1)
+	r.Set("x", r.Int("x")+40)
+	r.Set("y", r.Int("y")+40)
 
 }
 func (r *Player) Update() {
-  r.Set("x",r.Int("x") - 1)
-  r.Set("y",r.Int("y") - 1)
-
+	//  r.Set("x",r.Int("x") - 2)
+	//  r.Set("y",r.Int("y") - 2)
+}
+func (r *Game) Update() {
+	//  r.Set("x",r.Int("x") - 2)
+	//  r.Set("y",r.Int("y") - 2)
 }
 
 func (r *Player) Paint(p *qml.Painter) {
-  r.Set("targetX",0)
-  r.Set("x",0)
-  r.Set("targetY",0)
-  r.Set("y",0)
+	r.Set("targetX", 0)
+	r.Set("x", 0)
+	r.Set("targetY", 0)
+	r.Set("y", 0)
 }
 
+func (r *Game) Paint(p *qml.Painter) {
+}
 func run() error {
 	qml.Init(nil)
 
-	qml.RegisterTypes("GoExtensions", 1, 0, []qml.TypeSpec{{
-		Init: func(r *Player, obj qml.Object) { r.Object = obj },
-	}})
+	qml.RegisterTypes("GoExtensions", 1, 0, []qml.TypeSpec{
+		{Init: func(g *Game, obj qml.Object) { g.Object = obj }},
+		{Init: func(g *Player, obj qml.Object) { g.Object = obj }},
+	})
 
 	engine := qml.NewEngine()
 	component, err := engine.LoadFile("painting.qml")
