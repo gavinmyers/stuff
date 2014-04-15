@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-  "math/rand"
 	"gopkg.in/qml.v0"
 	"os"
 )
@@ -37,16 +36,22 @@ func (r *Player) Update() {
 
 }
 
+var firstRun = false
 func (r *Game) Update() {
-  for i := 0; i < 100; i++ {
-    t := Root.Object("floor")
-    c := t.Create(nil)
-    c.Set("x",rand.Intn(1260))
-    c.Set("y",rand.Intn(960))
-    c.Set("enabled", true)
-    c.Set("parent",Root)
+  if(firstRun) {
+    return
   }
-
+  firstRun = true
+  t := Root.Object("floor")
+  for x := -24; x < 1260; x=x+16 {
+    for y := -24; y < 960; y=y+16 {
+      c := t.Create(nil)
+      c.Set("x",x)
+      c.Set("y",y)
+      c.Set("enabled", true)
+      c.Set("parent",Root)
+    }
+  }
 }
 func (r *Player) Paint(p *qml.Painter) {
 }
