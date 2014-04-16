@@ -38,7 +38,7 @@ func (r *Player) Update() {
 
 func (r *Game) Update() {
 }
-func (r *Game) Build() {
+func (r *Game) Init() {
   t := Root.Object("floor_0_1")
   for x := -24; x < 1260; x=x+16 {
     for y := -24; y < 960; y=y+16 {

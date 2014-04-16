@@ -14,8 +14,9 @@ Rectangle {
       }
       Timer {
          interval: 50; running: true; repeat: false 
-         onTriggered: game.build() 
+         onTriggered: game.init() 
       }
+
     }
 
     width: 1260 
