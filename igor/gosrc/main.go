@@ -1,49 +1,26 @@
+
 package main
 
-import "github.com/limetext/termbox-go"
-import "./igor"
-import "./gruyere"
-import "./moo"
-import "./megaman"
-import "math/rand"
+import (
+    "fmt"
+    "log"
+    "net"
+    "encoding/gob"
+)
 
-var WORLD *moo.World
-var MAP *igor.Map
-var WALL = &megaman.Sprite {Id:256, Code:"#"}
-var VOID = &megaman.Sprite {Id:128, Code:"."}
-
-func init() {
-  gruyere.Init()
+type P struct {
+    M, N int64
 }
 
 func main() {
-	defer termbox.Close()
-  gruyere.Clear()
-  igor.WinWidth, igor.WinHeight = gruyere.Size()
-  sections := igor.Split(igor.WinWidth, igor.WinHeight)
-  MAP = igor.Clear(igor.WinWidth, igor.WinHeight)
-  for i := 0; i < 99; i++ {
-    s1 := sections[rand.Intn(len(sections))]
-    s2 := sections[rand.Intn(len(sections))]
-    igor.Connect(s1, s2, MAP)
-  }
-
-loop:
-	for {
-    for x := 0; x < len(MAP.Tiles); x++ {
-      row := MAP.Tiles[x]
-      for y := 0; y < len(MAP.Tiles[x]); y++ {
-        t := row[y]
-        gruyere.Draw(t.X, t.Y, gruyere.Color[rand.Intn(len(gruyere.Color))], gruyere.Color[0],"?")
-      }
+    fmt.Println("start client");
+    conn, err := net.Dial("tcp", "localhost:6667")
+    if err != nil {
+        log.Fatal("Connection error", err)
     }
-    gruyere.Draw((igor.WinWidth/2)-8, 0, gruyere.Color[32], gruyere.Color[0], "--- I.G.O.R. ---")
-    gruyere.Flush()
-    ev := termbox.PollEvent()
-    if ev.Key == termbox.KeyCtrlC {
-      break loop
-    }
-  }
+    encoder := gob.NewEncoder(conn)
+    p := &P{1, 2}
+    encoder.Encode(p)
+    conn.Close()
+    fmt.Println("done");
 }
-
-

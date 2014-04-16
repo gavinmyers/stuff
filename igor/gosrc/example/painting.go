@@ -32,10 +32,7 @@ func (r *Player) HandleClick(xPos, yPos int) {
 func (r *Player) Update() {
 	r.Set("x", r.Int("x")-2)
 	r.Set("y", r.Int("y")-2)
-
-
 }
-
 func (r *Game) Update() {
 }
 func (r *Game) Init() {
