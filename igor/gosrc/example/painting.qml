@@ -1,5 +1,7 @@
 import QtQuick 2.0
 import GoExtensions 1.0
+import QtGraphicalEffects 1.0
+
 
 Rectangle {
     Game {
@@ -7,10 +9,13 @@ Rectangle {
       x: 0
       y: 0
       Timer {
-         interval: 5; running: true; repeat: true
+         interval: 500; running: true; repeat: true
          onTriggered: game.update() 
       }
-
+      Timer {
+         interval: 50; running: true; repeat: false 
+         onTriggered: game.build() 
+      }
     }
 
     width: 1260 
@@ -26,7 +31,7 @@ Rectangle {
          onTriggered: player.update() 
       }
       Item {
-        id: playerRect 
+        id: photo 
         width: 16
         height: 18
         clip: true
@@ -42,7 +47,7 @@ Rectangle {
         onClicked: player.handleClick(mouse.x, mouse.y)
     }
 
-    property var floor: Component {
+    property var floor_0_0: Component {
       Rectangle {
         z:0
         width:16
@@ -55,6 +60,20 @@ Rectangle {
         }
       }
     }
+    property var floor_0_1: Component {
+      Rectangle {
+        z:0
+        width:16
+        height:18
+        clip: true
+        Image {
+          x: -48 
+          y: -128
+          source: "DawnLike_1/Objects/Floor.png" 
+        }
+      }
+    }
+
 
 }
 

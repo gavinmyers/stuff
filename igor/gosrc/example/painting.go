@@ -36,13 +36,10 @@ func (r *Player) Update() {
 
 }
 
-var firstRun = false
 func (r *Game) Update() {
-  if(firstRun) {
-    return
-  }
-  firstRun = true
-  t := Root.Object("floor")
+}
+func (r *Game) Build() {
+  t := Root.Object("floor_0_1")
   for x := -24; x < 1260; x=x+16 {
     for y := -24; y < 960; y=y+16 {
       c := t.Create(nil)
