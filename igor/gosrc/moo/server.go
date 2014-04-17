@@ -6,14 +6,18 @@ import (
     "encoding/gob"
 )
 
-type P struct {
-    M, N int64
+type Request struct {
+    Type int64
 }
-func handleConnection(conn net.Conn) {
+type Response struct {
+    Message string
+}
+func handleConnection(conn net.Conn) *Response {
     dec := gob.NewDecoder(conn)
-    p := &P{}
+    p := &Request{}
     dec.Decode(p)
     fmt.Printf("Received : %+v", p);
+    return &Response{"Yar"}
 }
 
 func main() {
