@@ -5,8 +5,11 @@ package main
 
 import (
   "net"
+  "fmt"
+  "strings"
   "container/list"
   "bytes"
+  "encoding/json"
        )
 
 type ClientChat struct {
@@ -18,9 +21,14 @@ type ClientChat struct {
   ListChain *list.List
 }
 
+type Action struct {
+  Name string
+  Target string
+}
+
 func (c *ClientChat) Read(buf []byte) bool {
   _,err := c.Con.Read(buf)
-  if err != nil { 
+  if err != nil {
     c.Close()
     return false
   }
@@ -68,11 +76,10 @@ func clientreceiver(client *ClientChat) {
       client.Close()
       break
     }
-    send := client.Name+"> "+string(buf)
-    client.OUT <-send
-    for i := 0;i < 2048;i++ {
-      buf[i] = 0x00
-    }
+    r := &Action{Name:client.Name, Target:strings.TrimRight(string(buf), "\x00")}
+    send,_ := json.Marshal(r)
+    fmt.Printf("%s\n", r.Name)
+    client.OUT <-string(send)
   }
   client.OUT <- client.Name+" has left chat"
 }
@@ -80,14 +87,13 @@ func clientreceiver(client *ClientChat) {
 func clientsender(client *ClientChat) {
   for {
     select {
-      case buf := <- client.IN:
+      case buf := <-client.IN:
         client.Con.Write([]byte(buf))
       case <-client.Quit:
         client.Con.Close()
         break
     }
   }
-  
 }
 
 func clientHandling(con net.Conn,ch chan string,lst *list.List) {

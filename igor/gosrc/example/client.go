@@ -12,6 +12,7 @@ import (
     "os/user"
     "os/exec"
     "strings"
+    "encoding/json"
 )
 
 var running bool;  // global variable if client is running
@@ -21,6 +22,10 @@ var port = flag.String("p", "9988" , "port number to connect to")
 var current_user,_ = user.Current()
 
 // func Log(v ...): loging. give log information if debug is true
+type Action struct {
+  Name string
+  Target string
+}
 
 func Log(v ...string) {
     if *debug == true {
@@ -91,8 +96,12 @@ func clientsender(cn net.Conn) {
 // clientreceiver(): wait for input from network and print it out
 func clientreceiver(cn net.Conn) {
     for running {
-        fmt.Printf("%s\n", Read(cn));
-        fmt.Printf("you> ")
+        resp := Read(cn)
+        var rec Action
+        json.Unmarshal([]byte(resp), &rec)
+        fmt.Printf("[ %s ]", rec.Name)
+        fmt.Printf("%s\n", rec)
+        fmt.Printf("%s\n", resp)
     }
 }
 
