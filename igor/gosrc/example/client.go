@@ -96,12 +96,13 @@ func clientsender(cn net.Conn) {
 // clientreceiver(): wait for input from network and print it out
 func clientreceiver(cn net.Conn) {
     for running {
-        resp := Read(cn)
+        buf := make([]byte,2048)
+        cn.Read(buf);
         var rec Action
-        json.Unmarshal([]byte(resp), &rec)
-        fmt.Printf("[ %s ]", rec.Name)
+        json.Unmarshal(buf, &rec)
+        fmt.Printf(rec.Name)
         fmt.Printf("%s\n", rec)
-        fmt.Printf("%s\n", resp)
+        fmt.Printf("%s\n", string(buf))
     }
 }
 
