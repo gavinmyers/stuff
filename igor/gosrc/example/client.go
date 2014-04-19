@@ -99,10 +99,14 @@ func clientreceiver(cn net.Conn) {
         buf := make([]byte,2048)
         cn.Read(buf);
         var rec Action
-        json.Unmarshal(buf, &rec)
-        fmt.Printf(rec.Name)
-        fmt.Printf("%s\n", rec)
-        fmt.Printf("%s\n", string(buf))
+        json.Unmarshal([]byte(strings.Trim(string(buf), "\x00")), &rec)
+        //if err := json.Unmarshal(buf, &rec); err != nil {
+        //  panic(err)
+        //}
+        //fmt.Printf(rec.Name)
+        //fmt.Printf("%s\n", rec)
+        fmt.Printf("\n[%s]\n", buf)
+        fmt.Printf("\n[%v]\n", rec)
     }
 }
 

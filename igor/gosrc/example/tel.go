@@ -78,7 +78,11 @@ func clientreceiver(client *ClientChat) {
     }
     r := &Action{Name:client.Name, Target:strings.TrimRight(string(buf), "\x00")}
     send,_ := json.Marshal(r)
-    fmt.Printf("%s\n", r.Name)
+    var rec Action
+    if err := json.Unmarshal(send, &rec); err != nil {
+      panic(err)
+    }
+    fmt.Printf("\n%s\n", r.Name)
     client.OUT <-string(send)
   }
   client.OUT <- client.Name+" has left chat"
