@@ -5,7 +5,6 @@ package main
 
 import (
   "net"
-  "fmt"
   "strings"
   "container/list"
   "bytes"
@@ -78,14 +77,11 @@ func clientreceiver(client *ClientChat) {
     }
     r := &Action{Name:client.Name, Target:strings.TrimRight(string(buf), "\x00")}
     send,_ := json.Marshal(r)
-    var rec Action
-    if err := json.Unmarshal(send, &rec); err != nil {
-      panic(err)
-    }
-    fmt.Printf("\n%s\n", r.Name)
     client.OUT <-string(send)
   }
-  client.OUT <- client.Name+" has left chat"
+  r := &Action{Name:client.Name, Target:"LEFT"}
+  send,_ := json.Marshal(r)
+  client.OUT <-string(send)
 }
 
 func clientsender(client *ClientChat) {
@@ -108,7 +104,9 @@ func clientHandling(con net.Conn,ch chan string,lst *list.List) {
   go clientsender(newclient)
   go clientreceiver(newclient)
   lst.PushBack(*newclient)
-  ch <- string(name + "has join the chat\n")
+  r := &Action{Name:name, Target:"JOINED"}
+  send,_ := json.Marshal(r)
+  ch <- string(send)
 }
 
 func main() {

@@ -62,12 +62,10 @@ func Read(con net.Conn) string{
 func clientsender(cn net.Conn) {
     reader := bufio.NewReader(os.Stdin);
     for {
-        fmt.Printf("you> ")
 
         input, err := reader.ReadBytes('\n')
         if err == nil {
             tokens := strings.Fields(string(input[0:len(input)-1]))
-            //fmt.Printf("%q\n", tokens)
 
             if tokens[0] == "/quit" {
                 cn.Write([]byte("is leaving..."))
@@ -97,16 +95,16 @@ func clientsender(cn net.Conn) {
 func clientreceiver(cn net.Conn) {
     for running {
         buf := make([]byte,2048)
-        cn.Read(buf);
+        _,err := cn.Read(buf);
+        if err != nil {
+          panic(err)
+        }
         var rec Action
         json.Unmarshal([]byte(strings.Trim(string(buf), "\x00")), &rec)
-        //if err := json.Unmarshal(buf, &rec); err != nil {
-        //  panic(err)
-        //}
         //fmt.Printf(rec.Name)
-        //fmt.Printf("%s\n", rec)
-        fmt.Printf("\n[%s]\n", buf)
-        fmt.Printf("\n[%v]\n", rec)
+        fmt.Printf("(%s)\n", string(buf))
+        fmt.Printf("\n[%v]", rec.Name)
+        fmt.Printf(" %v\n---------\n", rec.Target)
     }
 }
 
