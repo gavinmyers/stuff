@@ -1,1 +1,0 @@
-make test && make && ./igor
