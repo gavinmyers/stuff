@@ -5,7 +5,6 @@ import (
     "net"
     "log"
     "os"
-    //"bytes"
     "bufio"
     "time"
     "flag"
@@ -62,9 +61,8 @@ func Read(con net.Conn) string{
 func clientsender(cn net.Conn) {
     reader := bufio.NewReader(os.Stdin);
     for {
-
         input, err := reader.ReadBytes('\n')
-        if err == nil {
+        if err == nil  && len(input) > 1 {
             tokens := strings.Fields(string(input[0:len(input)-1]))
 
             if tokens[0] == "/quit" {
@@ -84,7 +82,6 @@ func clientsender(cn net.Conn) {
                 }
                 continue
             }
-
             Log("clientsender(): send: ", string(input[0:len(input)-1]))
             cn.Write(input[0:len(input)-1])
         }
